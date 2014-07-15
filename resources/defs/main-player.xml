@@ -1,0 +1,60 @@
+<entity>
+    <sprites>
+        <sprite name="player" path="male_spritesheet.png" />
+    </sprites>
+    <animations total="1">
+    	<anim name="walk-up" id="0" max-frames="8"  anim-type="2">
+    		<frame id="0" sprite-id="player" frame-duration="100" startx="64" starty="0" width="64.33" height="64" />
+    		<frame id="1" sprite-id="player" frame-duration="100" startx="128" starty="0" width="64.33" height="64" />
+    		<frame id="2" sprite-id="player" frame-duration="100" startx="192" starty="0" width="64.33" height="64" />
+    		<frame id="3" sprite-id="player" frame-duration="100" startx="256" starty="0" width="64.33" height="64" />
+    		<frame id="4" sprite-id="player" frame-duration="100" startx="320" starty="0" width="64.33" height="64" />
+    		<frame id="5" sprite-id="player" frame-duration="100" startx="384" starty="0" width="64.33" height="64" />
+    		<frame id="6" sprite-id="player" frame-duration="100" startx="448" starty="0" width="64.33" height="64" />
+    		<frame id="7" sprite-id="player" frame-duration="100" startx="512" starty="0" width="64.33" height="64" />
+    	</anim>
+    	<anim name="walk-left" id="1" max-frames="8"  anim-type="2">
+    		<frame id="0" sprite-id="player" frame-duration="100" startx="64" starty="64" width="64.33" height="64" />
+    		<frame id="1" sprite-id="player" frame-duration="100" startx="128" starty="64" width="64.33" height="64" />
+    		<frame id="2" sprite-id="player" frame-duration="100" startx="192" starty="64" width="64.33" height="64" />
+    		<frame id="3" sprite-id="player" frame-duration="100" startx="256" starty="64" width="64.33" height="64" />
+    		<frame id="4" sprite-id="player" frame-duration="100" startx="320" starty="64" width="64.33" height="64" />
+    		<frame id="5" sprite-id="player" frame-duration="100" startx="384" starty="64" width="64.33" height="64" />
+    		<frame id="6" sprite-id="player" frame-duration="100" startx="448" starty="64" width="64.33" height="64" />
+    		<frame id="7" sprite-id="player" frame-duration="100" startx="512" starty="64" width="64.33" height="64" />
+    	</anim>
+    	<anim name="walk-down" id="2" max-frames="8"  anim-type="2">
+    		<frame id="0" sprite-id="player" frame-duration="100" startx="64" starty="128" width="64.33" height="64" />
+    		<frame id="1" sprite-id="player" frame-duration="100" startx="128" starty="128" width="64.33" height="64" />
+    		<frame id="2" sprite-id="player" frame-duration="100" startx="192" starty="128" width="64.33" height="64" />
+    		<frame id="3" sprite-id="player" frame-duration="100" startx="256" starty="128" width="64.33" height="64" />
+    		<frame id="4" sprite-id="player" frame-duration="100" startx="320" starty="128" width="64.33" height="64" />
+    		<frame id="5" sprite-id="player" frame-duration="100" startx="384" starty="128" width="64.33" height="64" />
+    		<frame id="6" sprite-id="player" frame-duration="100" startx="448" starty="128" width="64.33" height="64" />
+    		<frame id="7" sprite-id="player" frame-duration="100" startx="512" starty="128" width="64.33" height="64" />
+    	</anim>
+    	<anim name="walk-right" id="3" max-frames="8"  anim-type="2">
+    		<frame id="0" sprite-id="player" frame-duration="100" startx="64" starty="192" width="64.33" height="64" />
+    		<frame id="1" sprite-id="player" frame-duration="100" startx="128" starty="192" width="64.33" height="64" />
+    		<frame id="2" sprite-id="player" frame-duration="100" startx="192" starty="192" width="64.33" height="64" />
+    		<frame id="3" sprite-id="player" frame-duration="100" startx="256" starty="192" width="64.33" height="64" />
+    		<frame id="4" sprite-id="player" frame-duration="100" startx="320" starty="192" width="64.33" height="64" />
+    		<frame id="5" sprite-id="player" frame-duration="100" startx="384" starty="192" width="64.33" height="64" />
+    		<frame id="6" sprite-id="player" frame-duration="100" startx="448" starty="192" width="64.33" height="64" />
+    		<frame id="7" sprite-id="player" frame-duration="100" startx="512" starty="192" width="64.33" height="64" />
+    	</anim>
+    	
+    	<anim name="standing-up" id="4" max-frames="1"  anim-type="2">
+    		<frame id="0" sprite-id="player" frame-duration="100" startx="0" starty="0" width="64.33" height="64" />
+    	</anim>
+    	<anim name="standing-left" id="5" max-frames="1"  anim-type="2">
+    		<frame id="0" sprite-id="player" frame-duration="100" startx="0" starty="64" width="64.33" height="64" />
+    	</anim>
+    	<anim name="standing-down" id="6" max-frames="1"  anim-type="2">
+    		<frame id="0" sprite-id="player" frame-duration="100" startx="0" starty="128" width="64.33" height="64" />
+    	</anim>
+    	<anim name="standing-right" id="7" max-frames="1"  anim-type="2">
+    		<frame id="0" sprite-id="player" frame-duration="100" startx="0" starty="192" width="64.33" height="64" />
+    	</anim>
+    </animations>
+</entity>

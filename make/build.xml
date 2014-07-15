@@ -1,0 +1,64 @@
+<project name="GameEngine" basedir="." default="init.all">
+
+
+	<target name="set.debug">
+		<property name="javacdebug" value="true" />
+		<property name="javacdebuglevel" value="source,lines,vars" />
+	</target>
+
+
+	<target name="set.core.env" depends="init.common">
+		<!-- the source directories -->
+		<property name="core.src.java" value="${project.root}/src/core/classes" />
+
+		<!-- the compile output directories -->
+		<property name="core.out.classes" value="${build.core}/classes" />
+
+	</target>
+
+
+
+	<target name="init.common" unless="init.all.done">
+		<property name="init.all.done" value="true" />
+
+		<property name="project.root" value=".." />
+		<property name="build" value="${project.root}/build" />
+		<property name="src" value="${project.root}/src" />
+		<property name="lib" value="${build}/lib" />
+		<property name="jar" value="${build}/jar" />
+
+		<property name="build.core" value="${build}/core" />
+
+		<!-- Dependencies definition -->
+		<property name="gluegen.jar" value="${project.root}/make/lib/gluegen/gluegen-rt.jar" />
+		<property name="jogl.jar" value="${project.root}/make/lib/jogl/jogl-all.jar" />
+		<property name="joal.jar" value="${project.root}/make/lib/joal/joal.jar" />
+
+
+		<path id="core.compile.classpath">
+			<pathelement location="${gluegen.jar}" />
+			<pathelement location="${jogl.jar}" />
+			<pathelement location="${joal.jar}" />
+		</path>
+	</target>
+
+
+	<target name="init.all.debug" depends="set.debug,set.core.env" />
+	<target name="init.all" depends="set.core.env" />
+
+
+	<target name="compile.core" depends="set.core.env" description="--> compile the project">
+		<mkdir dir="${core.out.classes}" />
+		<javac destdir="${core.out.classes}" 
+			   fork="yes" 
+			   includeAntRuntime="true" 
+			   encoding="UTF-8" 
+			   debug="${javacdebug}" 
+			   debuglevel="${javacdebuglevel}">
+			<classpath refid="core.compile.classpath" />
+			<src path="${core.src.java}" />
+		</javac>
+
+	</target>
+
+</project>
