@@ -1,20 +1,31 @@
 package com.jprada.core.states;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.media.opengl.GL;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jprada.core.entity.CharacterXMLImporter;
+import com.jprada.core.entity.MapObject;
+import com.jprada.core.entity.ObjectCollision;
 import com.jprada.core.entity.MapObject.Direction;
 import com.jprada.core.entity.PlayableCharacter;
+import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.SpriteBatch2;
+import com.jprada.core.util.GLColor;
+import com.jprada.core.util.algorithm.RadixSort;
 
 public class WorldMapState implements GameState {
 
 	private SpriteBatch2 spriteBatch;
+	private LineBatch lineBatch;
 
-	private PlayableCharacter player;
+	public static PlayableCharacter player;	
+	public static List<MapObject> worldMapObjects = new ArrayList<MapObject>();
+	
 	
 	
 	private KeyListener keyListener = new KeyListener() {
@@ -104,25 +115,73 @@ public class WorldMapState implements GameState {
 	public void onInit(GL gl) {
 		spriteBatch = new SpriteBatch2();
 		spriteBatch.setup(gl);
+		
+		lineBatch = new LineBatch();
+		lineBatch.setup(gl);
+		
+		
 
 		player = (PlayableCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", PlayableCharacter.class);
+		PlayableCharacter p2 = (PlayableCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", PlayableCharacter.class);
+		PlayableCharacter p3 = (PlayableCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", PlayableCharacter.class);
+		
+		
+		p2.setPosX(200);
+		p2.setPosY(200);
+		p3.setPosX(300);
+		p3.setPosY(100);
+		
+		this.worldMapObjects.add(player);
+		this.worldMapObjects.add(p2);
+		this.worldMapObjects.add(p3);
 		
 	}
 
 	@Override
 	public void onUpdate(GL gl) {
 		// TODO Auto-generated method stub
-		player.onUpdate();
+		for(MapObject mo : this.worldMapObjects) {
+			mo.onUpdate();
+		}
+		
+		
+		
+		// check for collisions
+		
+//		player.onUpdate();
 	}
 
 	@Override
 	public void onRender(GL gl, double interpolation) {
 		// TODO Auto-generated method stub
+		
+		this.worldMapObjects = RadixSort.sortEntities(this.worldMapObjects);
 		spriteBatch.begin(gl);
 
-		player.onRender(gl, spriteBatch, interpolation);
+		for(MapObject mo : this.worldMapObjects) {
+			mo.onRender(gl, spriteBatch, interpolation);
+		}
+//		player.onRender(gl, spriteBatch, interpolation);
 
 		spriteBatch.end(gl);
+		
+		
+		lineBatch.begin(gl);
+			lineBatch.setRenderColor(new GLColor(1.0f, 1.0f, 0.0f));
+			
+			for(MapObject mo : this.worldMapObjects) {
+				float x1 = mo.getCollideBox().getX() + mo.getCollideBox().getxOffset();
+				float y1 = mo.getCollideBox().getY() + mo.getCollideBox().getyOffset();
+				float x2= x1 + mo.getCollideBox().getW() - mo.getCollideBox().getwOffset() - mo.getCollideBox().getxOffset();
+				float y2 = y1 + mo.getCollideBox().getH() - mo.getCollideBox().gethOffset() - mo.getCollideBox().getyOffset();
+			
+				lineBatch.draw(gl, x1, y1, x1, y2);
+				lineBatch.draw(gl, x1, y1, x2, y1);
+				lineBatch.draw(gl, x2, y2, x1, y2);
+				lineBatch.draw(gl, x2, y2, x2, y1);
+			}
+		
+		lineBatch.end(gl);
 	}
 
 	@Override

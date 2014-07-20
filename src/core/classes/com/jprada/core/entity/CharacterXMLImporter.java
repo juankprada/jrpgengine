@@ -85,6 +85,7 @@ public class CharacterXMLImporter {
 
 		character.setAnimations(CharacterXMLImporter.animations);
 		character.setSprites(CharacterXMLImporter.sprites);
+		character.setCollideBox(new CollideBox(0, 0, 64, 64, 20, 40, 20, 5));
 		
 		CharacterXMLImporter.animations = null;
 		CharacterXMLImporter.sprites = null;

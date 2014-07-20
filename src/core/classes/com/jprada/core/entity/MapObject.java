@@ -15,7 +15,7 @@ import com.jprada.core.graphics.SpriteFrame;
 /**
  * Created By: Juankprada Date: 10/5/12 Time: 4:43 PM
  */
-public abstract class MapObject {
+public abstract class MapObject implements Collidable{
 
 	public enum Direction {
 		down, downLeft, downRight, left, right, up, upLeft, upRight
@@ -46,8 +46,14 @@ public abstract class MapObject {
 	protected float drawX;
 	
 	protected float drawY;
+	
+	protected boolean collided = false;
 
 	protected Map<String, Sprite> sprites = new HashMap<String, Sprite>();
+	
+	protected CollideBox collideBox;
+	
+	protected InteractBox interactBox;
 
 	public Map<String, Animation> getAnimations() {
 		return animations;
@@ -84,6 +90,23 @@ public abstract class MapObject {
 	public Map<String, Sprite> getSprites() {
 		return sprites;
 	}
+	
+
+	public CollideBox getCollideBox() {
+		return collideBox;
+	}
+
+	public void setCollideBox(CollideBox collideBox) {
+		this.collideBox = collideBox;
+	}
+
+	public InteractBox getInteractBox() {
+		return interactBox;
+	}
+
+	public void setInteractBox(InteractBox interactBox) {
+		this.interactBox = interactBox;
+	}
 
 	protected void move(Direction direction) {
 		this.movingDirection = direction;
@@ -112,12 +135,22 @@ public abstract class MapObject {
 		this.name = name;
 	}
 
+	public boolean isCollided() {
+		return collided;
+	}
+
+	public void setCollided(boolean collided) {
+		this.collided = collided;
+	}
+
 	public void setPosX(float posX) {
 		this.posX = posX;
+		this.collideBox.onUpdate(this.posX, this.posY);
 	}
 
 	public void setPosY(float posY) {
 		this.posY = posY;
+		this.collideBox.onUpdate(this.posX, this.posY);
 	}
 
 	public void setSpeedX(float speedX) {
@@ -133,5 +166,24 @@ public abstract class MapObject {
 	}
 
 	
+	public void setPosition(float x, float y) {
+		this.posX = x;
+		this.posY = y;
+	}
+	
+	/*
+	 * Hack to get the real y pos, as rigth now, rendering is done top to bottom
+	 * so we need to add the currentFrame height to the pos_y variable to get the real
+	 * Y position
+	 */
+	public float getCoordY() {
+		float realY = posY;
+		
+		if(this.currentAnimation != null) {
+			realY+=this.currentAnimation.getFrames().get(this.currentAnimation.getCurrentFrame()).getRegionHeight();
+		}
+		
+		return realY;
+	}
 
 }

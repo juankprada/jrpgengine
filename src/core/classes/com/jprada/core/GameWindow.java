@@ -27,6 +27,7 @@ import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.newt.util.MonitorModeUtil;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.AnimatorBase;
+import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jprada.core.entity.CharacterXMLImporter;
 import com.jprada.core.entity.PlayableCharacter;
@@ -163,7 +164,7 @@ public class GameWindow implements GLEventListener {
 
     public void createDisplay() {
 
-        GLProfile glp = GLProfile.getDefault();
+        GLProfile glp = GLProfile.get(GLProfile.GL2);
 
         GLCapabilities caps = new GLCapabilities(glp);
 
@@ -256,7 +257,10 @@ public class GameWindow implements GLEventListener {
         Animator ani = new Animator(canvas);
         ani.setRunAsFastAsPossible(true);
         animator = ani;
-
+//        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
+       
+//        animator = fpsanimator;
+//        animator.add(canvas);
         animator.start();
 
     }
@@ -277,7 +281,7 @@ public class GameWindow implements GLEventListener {
 
             if (currentGameState != null) {
                 currentGameState.onUpdate(gl);
-
+//                System.out.println("LLego");
             }
            
             
@@ -285,6 +289,7 @@ public class GameWindow implements GLEventListener {
             loops++;
         }
 
+       
         interpolation = (getMilliSeconds() + skipTicks - nextGameTick) / skipTicks;
 
 
@@ -305,7 +310,8 @@ public class GameWindow implements GLEventListener {
             fpsTimer = getMilliSeconds() + 1000;
 
         }
-
+        
+//        System.out.println("Render");
         renderer.beginRendering(windowWidth, windowHeight);
         renderer.draw("Frames:"+fps + "/s", 10, windowHeight -20);
 
@@ -372,10 +378,6 @@ public class GameWindow implements GLEventListener {
     }
 
 
-
-    //--------------------------
-    // Testing vars
-    //--------------------------
 
   
     
