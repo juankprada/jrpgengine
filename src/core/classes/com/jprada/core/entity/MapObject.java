@@ -52,7 +52,7 @@ public abstract class MapObject implements Collidable{
 	protected Map<String, Sprite> sprites = new HashMap<String, Sprite>();
 	
 	protected CollideBox collideBox;
-	
+		
 	protected InteractBox interactBox;
 
 	public Map<String, Animation> getAnimations() {
@@ -146,11 +146,13 @@ public abstract class MapObject implements Collidable{
 	public void setPosX(float posX) {
 		this.posX = posX;
 		this.collideBox.onUpdate(this.posX, this.posY);
+		this.interactBox.onUpdate(this.posX, this.posY);
 	}
 
 	public void setPosY(float posY) {
 		this.posY = posY;
 		this.collideBox.onUpdate(this.posX, this.posY);
+		this.interactBox.onUpdate(this.posX, this.posY);
 	}
 
 	public void setSpeedX(float speedX) {

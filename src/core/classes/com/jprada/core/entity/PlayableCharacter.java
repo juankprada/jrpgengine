@@ -16,13 +16,31 @@ public class PlayableCharacter extends Entity {
 			for (MapObject mo2 : WorldMapState.worldMapObjects) {
 
 				if (!mo.equals(mo2) && mo.collides(mo2)) {
-					ObjectCollision.ObjectCollisionList.add(new ObjectCollision(mo, mo2));
+					ObjectCollision.ObjectCollisionList
+							.add(new ObjectCollision(mo, mo2));
 					posValid = false;
 				}
 			}
 		}
 
 		return posValid;
+	}
+
+	private boolean interacting() {
+		for (MapObject mo : WorldMapState.worldMapObjects) {
+			for (MapObject mo2 : WorldMapState.worldMapObjects) {
+
+				if (!mo.equals(mo2)
+						&& mo.getCollideBox().collides(mo2.getInteractBox())) {
+					ObjectInteraction.ObjectInteractionList
+							.add(new ObjectInteraction(mo, mo2));
+					System.out.println("Interacting");
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -50,6 +68,10 @@ public class PlayableCharacter extends Entity {
 		}
 
 		this.collideBox.onUpdate(this.posX, this.posY);
+
+		this.interactBox.onUpdate(this.posX, this.posY);
+
+		interacting();
 
 	}
 

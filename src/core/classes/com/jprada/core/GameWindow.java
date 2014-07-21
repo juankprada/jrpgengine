@@ -222,12 +222,15 @@ public class GameWindow implements GLEventListener {
 
             NewtCanvasAWT canvasAWT = new NewtCanvasAWT(canvas);
             canvasAWT.setVisible(true);
+            canvasAWT.setSize(windowWidth, windowHeight);
 
             frame = new Frame(windowTitle);
             frame.add(canvasAWT);
-            frame.setSize(windowWidth, windowHeight);
+//            frame.setSize(windowWidth, windowHeight);
             frame.setResizable(false);
+            frame.pack();
             frame.setVisible(true);
+            
             canvas.setVisible(true);
 
         }

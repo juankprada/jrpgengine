@@ -167,7 +167,7 @@ public class WorldMapState implements GameState {
 		
 		
 		lineBatch.begin(gl);
-			lineBatch.setRenderColor(new GLColor(1.0f, 1.0f, 0.0f));
+			lineBatch.setRenderColor(new GLColor(1.0f, 0.0f, 0.0f));
 			
 			for(MapObject mo : this.worldMapObjects) {
 				float x1 = mo.getCollideBox().getX() + mo.getCollideBox().getxOffset();
@@ -181,6 +181,19 @@ public class WorldMapState implements GameState {
 				lineBatch.draw(gl, x2, y2, x2, y1);
 			}
 		
+			lineBatch.setRenderColor(new GLColor(0, 1.0f, 0));
+			for(MapObject mo : this.worldMapObjects) {
+				float x1 = mo.getInteractBox().getX() + mo.getInteractBox().getxOffset();
+				float y1 = mo.getInteractBox().getY() + mo.getInteractBox().getyOffset();
+				float x2= x1 + mo.getInteractBox().getW() - mo.getInteractBox().getwOffset() - mo.getInteractBox().getxOffset();
+				float y2 = y1 + mo.getInteractBox().getH() - mo.getInteractBox().gethOffset() - mo.getInteractBox().getyOffset();
+			
+				lineBatch.draw(gl, x1, y1, x1, y2);
+				lineBatch.draw(gl, x1, y1, x2, y1);
+				lineBatch.draw(gl, x2, y2, x1, y2);
+				lineBatch.draw(gl, x2, y2, x2, y1);
+			}
+			
 		lineBatch.end(gl);
 	}
 
