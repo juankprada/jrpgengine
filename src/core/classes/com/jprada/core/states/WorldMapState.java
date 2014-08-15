@@ -8,22 +8,23 @@ import javax.media.opengl.GL;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
+import com.jprada.core.GameWindow;
+import com.jprada.core.entity.GameCharacter;
 import com.jprada.core.entity.CharacterXMLImporter;
 import com.jprada.core.entity.MapObject;
-import com.jprada.core.entity.ObjectCollision;
 import com.jprada.core.entity.MapObject.Direction;
-import com.jprada.core.entity.PlayableCharacter;
+import com.jprada.core.entity.utils.ObjectInteraction;
 import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.SpriteBatch2;
 import com.jprada.core.util.GLColor;
 import com.jprada.core.util.algorithm.RadixSort;
 
-public class WorldMapState implements GameState {
+public class WorldMapState extends GameState {
 
 	private SpriteBatch2 spriteBatch;
 	private LineBatch lineBatch;
 
-	public static PlayableCharacter player;	
+	public static GameCharacter player;	
 	public static List<MapObject> worldMapObjects = new ArrayList<MapObject>();
 	
 	
@@ -41,7 +42,12 @@ public class WorldMapState implements GameState {
 		public void keyReleased(KeyEvent e) {
 			if (!e.isAutoRepeat() ) {
 				int keyCode = e.getKeyCode();
-								
+				
+				if(keyCode == KeyEvent.VK_SHIFT) {
+					System.out.println("Released Tab");
+					GameWindow.ENABLE_DEBUG_INFO = false;
+				}
+				
 				if (keyCode == KeyEvent.VK_LEFT) {
 					this.keyStates[LEFT_KEY] = false;
 					if(keyStates[DOWN_KEY]) { player.setMovingDirection(Direction.down); }
@@ -74,6 +80,16 @@ public class WorldMapState implements GameState {
 		public void keyPressed(KeyEvent e) {
 			if (!e.isAutoRepeat()) {
 				int keyCode = e.getKeyCode();
+				
+				if(keyCode == KeyEvent.VK_SPACE && !player.isWantToInteract()) {
+					player.setWantToInteract(true);
+				}
+				
+				if(keyCode == KeyEvent.VK_SHIFT) {
+					System.out.println("Pressed Tab");
+					GameWindow.ENABLE_DEBUG_INFO = true;
+				}
+				
 				if (keyCode == KeyEvent.VK_LEFT) {
 					this.keyStates[LEFT_KEY] = true;
 					if(player.getMovingDirection() != Direction.left) { 
@@ -121,15 +137,15 @@ public class WorldMapState implements GameState {
 		
 		
 
-		player = (PlayableCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", PlayableCharacter.class);
-		PlayableCharacter p2 = (PlayableCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", PlayableCharacter.class);
-		PlayableCharacter p3 = (PlayableCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", PlayableCharacter.class);
+		player = (GameCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", GameCharacter.class);
+		GameCharacter p2 = (GameCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", GameCharacter.class);
+		GameCharacter p3 = (GameCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", GameCharacter.class);
 		
 		
 		p2.setPosX(200);
 		p2.setPosY(200);
-		p3.setPosX(300);
-		p3.setPosY(100);
+		p3.setPosX(200);
+		p3.setPosY(220);
 		
 		this.worldMapObjects.add(player);
 		this.worldMapObjects.add(p2);
@@ -139,18 +155,29 @@ public class WorldMapState implements GameState {
 
 	@Override
 	public void onUpdate(GL gl) {
-		// TODO Auto-generated method stub
+		ObjectInteraction.executeInteractions();
+		
 		for(MapObject mo : this.worldMapObjects) {
 			mo.onUpdate();
 		}
 		
-		
-		
-		// check for collisions
-		
-//		player.onUpdate();
+		for(MapObject mo : WorldMapState.worldMapObjects) {
+			for (MapObject mo2 : WorldMapState.worldMapObjects) {
+				
+				if(!mo.equals(mo2) && mo.isWantToInteract() && mo2.getInteractBox().collides(mo.getCollideBox())) {
+					ObjectInteraction.ObjectInteractionList.add(new ObjectInteraction(mo, mo2));
+				}
+			}
+			
+			mo.setWantToInteract(false);
+		}
 	}
 
+	@Override
+	public GameCharacter getPlayer() {
+		return this.player;
+	}
+	
 	@Override
 	public void onRender(GL gl, double interpolation) {
 		// TODO Auto-generated method stub
@@ -165,36 +192,37 @@ public class WorldMapState implements GameState {
 
 		spriteBatch.end(gl);
 		
-		
-		lineBatch.begin(gl);
-			lineBatch.setRenderColor(new GLColor(1.0f, 0.0f, 0.0f));
+		if(GameWindow.ENABLE_DEBUG_INFO) {
+			lineBatch.begin(gl);
+				lineBatch.setRenderColor(new GLColor(1.0f, 0.0f, 0.0f));
+				
+				for(MapObject mo : this.worldMapObjects) {
+					float x1 = mo.getCollideBox().getX() + mo.getCollideBox().getxOffset();
+					float y1 = mo.getCollideBox().getY() + mo.getCollideBox().getyOffset();
+					float x2= x1 + mo.getCollideBox().getW() - mo.getCollideBox().getwOffset() - mo.getCollideBox().getxOffset();
+					float y2 = y1 + mo.getCollideBox().getH() - mo.getCollideBox().gethOffset() - mo.getCollideBox().getyOffset();
+				
+					lineBatch.draw(gl, x1, y1, x1, y2);
+					lineBatch.draw(gl, x1, y1, x2, y1);
+					lineBatch.draw(gl, x2, y2, x1, y2);
+					lineBatch.draw(gl, x2, y2, x2, y1);
+				}
 			
-			for(MapObject mo : this.worldMapObjects) {
-				float x1 = mo.getCollideBox().getX() + mo.getCollideBox().getxOffset();
-				float y1 = mo.getCollideBox().getY() + mo.getCollideBox().getyOffset();
-				float x2= x1 + mo.getCollideBox().getW() - mo.getCollideBox().getwOffset() - mo.getCollideBox().getxOffset();
-				float y2 = y1 + mo.getCollideBox().getH() - mo.getCollideBox().gethOffset() - mo.getCollideBox().getyOffset();
-			
-				lineBatch.draw(gl, x1, y1, x1, y2);
-				lineBatch.draw(gl, x1, y1, x2, y1);
-				lineBatch.draw(gl, x2, y2, x1, y2);
-				lineBatch.draw(gl, x2, y2, x2, y1);
-			}
-		
-			lineBatch.setRenderColor(new GLColor(0, 1.0f, 0));
-			for(MapObject mo : this.worldMapObjects) {
-				float x1 = mo.getInteractBox().getX() + mo.getInteractBox().getxOffset();
-				float y1 = mo.getInteractBox().getY() + mo.getInteractBox().getyOffset();
-				float x2= x1 + mo.getInteractBox().getW() - mo.getInteractBox().getwOffset() - mo.getInteractBox().getxOffset();
-				float y2 = y1 + mo.getInteractBox().getH() - mo.getInteractBox().gethOffset() - mo.getInteractBox().getyOffset();
-			
-				lineBatch.draw(gl, x1, y1, x1, y2);
-				lineBatch.draw(gl, x1, y1, x2, y1);
-				lineBatch.draw(gl, x2, y2, x1, y2);
-				lineBatch.draw(gl, x2, y2, x2, y1);
-			}
-			
-		lineBatch.end(gl);
+				lineBatch.setRenderColor(new GLColor(0, 1.0f, 0));
+				for(MapObject mo : this.worldMapObjects) {
+					float x1 = mo.getInteractBox().getX() + mo.getInteractBox().getxOffset();
+					float y1 = mo.getInteractBox().getY() + mo.getInteractBox().getyOffset();
+					float x2= x1 + mo.getInteractBox().getW() - mo.getInteractBox().getwOffset() - mo.getInteractBox().getxOffset();
+					float y2 = y1 + mo.getInteractBox().getH() - mo.getInteractBox().gethOffset() - mo.getInteractBox().getyOffset();
+				
+					lineBatch.draw(gl, x1, y1, x1, y2);
+					lineBatch.draw(gl, x1, y1, x2, y1);
+					lineBatch.draw(gl, x2, y2, x1, y2);
+					lineBatch.draw(gl, x2, y2, x2, y1);
+				}
+				
+			lineBatch.end(gl);
+		}
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import com.jprada.core.entity.utils.ObjectCollision;
 import com.jprada.core.graphics.Animation;
 import com.jprada.core.graphics.Sprite;
 import com.jprada.core.graphics.SpriteBatch;
@@ -73,28 +74,28 @@ public abstract class Entity extends MapObject {
 				if (this.movingDirection == Direction.upLeft) {
 					speedY = -moveSpeed / 1.5f;
 					speedX = -moveSpeed / 1.5f;
-					this.currentAnimation = animations.get("walk-up-left");
+					this.currentAnimation = animations.get("walk-left");
 					this.facingDirection = Direction.upLeft;
 
 				}
 				if (this.movingDirection == Direction.upRight) {
 					speedY = -moveSpeed / 1.5f;
 					speedX = moveSpeed / 1.5f;
-					this.currentAnimation = animations.get("walk-up-right");
+					this.currentAnimation = animations.get("walk-right");
 					this.facingDirection = Direction.upRight;
 
 				}
 				if (this.movingDirection == Direction.downLeft) {
 					speedY = moveSpeed / 1.5f;
 					speedX = -moveSpeed / 1.5f;
-					this.currentAnimation = animations.get("walk-down-left");
+					this.currentAnimation = animations.get("walk-left");
 					this.facingDirection = Direction.downLeft;
 
 				}
 				if (this.movingDirection == Direction.downRight) {
 					speedY = moveSpeed / 1.5f;
 					speedX = moveSpeed / 1.5f;
-					this.currentAnimation = animations.get("walk-down-right");
+					this.currentAnimation = animations.get("walk-right");
 					this.facingDirection = Direction.downRight;
 				}
 				
@@ -118,13 +119,13 @@ public abstract class Entity extends MapObject {
 		} else if (this.facingDirection == Direction.left) {
 			this.currentAnimation = animations.get("standing-left");
 		} else if (this.facingDirection == Direction.upLeft) {
-			this.currentAnimation = animations.get("standing-up-left");
+			this.currentAnimation = animations.get("standing-left");
 		} else if (this.facingDirection == Direction.upRight) {
-			this.currentAnimation = animations.get("standing-up-right");
+			this.currentAnimation = animations.get("standing-right");
 		} else if (this.facingDirection == Direction.downLeft) {
-			this.currentAnimation = animations.get("standing-down-left");
+			this.currentAnimation = animations.get("standing-left");
 		} else if (this.facingDirection == Direction.downRight) {
-			this.currentAnimation = animations.get("standing-down-right");
+			this.currentAnimation = animations.get("standing-right");
 		} else {
 			this.facingDirection = Direction.down;
 			this.currentAnimation = animations.get("standing-down");
@@ -153,4 +154,20 @@ public abstract class Entity extends MapObject {
 		fixStandingDireciton();
 	}
 
+	
+	protected boolean posValid() {
+		boolean posValid = true;
+//		for (MapObject mo : WorldMapState.worldMapObjects) {
+			for (MapObject mo2 : WorldMapState.worldMapObjects) {
+
+				if (!this.equals(mo2) && this.collides(mo2)) {
+					ObjectCollision.ObjectCollisionList
+							.add(new ObjectCollision(this, mo2));
+					posValid = false;
+				}
+			}
+//		}
+
+		return posValid;
+	}
 }

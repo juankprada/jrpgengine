@@ -7,15 +7,19 @@ import java.util.Map;
 
 import javax.media.opengl.GL;
 
+import com.jprada.core.entity.utils.CollideBox;
+import com.jprada.core.entity.utils.InteractBox;
+import com.jprada.core.entity.utils.ObjectInteraction;
 import com.jprada.core.graphics.Animation;
 import com.jprada.core.graphics.Sprite;
 import com.jprada.core.graphics.SpriteBatch2;
 import com.jprada.core.graphics.SpriteFrame;
+import com.jprada.core.states.WorldMapState;
 
 /**
  * Created By: Juankprada Date: 10/5/12 Time: 4:43 PM
  */
-public abstract class MapObject implements Collidable{
+public abstract class MapObject implements Collidable, Interactable{
 
 	public enum Direction {
 		down, downLeft, downRight, left, right, up, upLeft, upRight
@@ -54,6 +58,26 @@ public abstract class MapObject implements Collidable{
 	protected CollideBox collideBox;
 		
 	protected InteractBox interactBox;
+	
+	protected boolean wantToInteract = false;
+	
+	protected boolean interacting = false;
+
+	public boolean isInteracting() {
+		return interacting;
+	}
+
+	public void setInteracting(boolean interacting) {
+		this.interacting = interacting;
+	}
+
+	public boolean isWantToInteract() {
+		return wantToInteract;
+	}
+
+	public void setWantToInteract(boolean wantToInteract) {
+		this.wantToInteract = wantToInteract;
+	}
 
 	public Map<String, Animation> getAnimations() {
 		return animations;
@@ -124,7 +148,9 @@ public abstract class MapObject implements Collidable{
 	}
 
 	public void setFacingDirection(Direction facingDirection) {
-		this.facingDirection = facingDirection;
+		if(!this.facingDirection.equals(facingDirection)) {
+			this.facingDirection = facingDirection;
+		}
 	}
 
 	public void setMovingDirection(Direction movingDirection) {
@@ -188,4 +214,21 @@ public abstract class MapObject implements Collidable{
 		return realY;
 	}
 
+	
+//	protected void checkInteraction() {
+//	
+//			for (MapObject mo2 : WorldMapState.worldMapObjects) {
+//
+//				if (!this.equals(mo2)
+//						&& mo2.getInteractBox().collides(this.getCollideBox()) && (this.isWantToInteract() || mo2.isWantToInteract()) ) {
+//					ObjectInteraction.ObjectInteractionList
+//							.add(new ObjectInteraction(this, mo2));
+//					System.out.println("We Interacted");
+//					this.interacting = true;
+//				}
+//			}
+//		
+//		
+//		
+//	}
 }

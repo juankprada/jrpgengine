@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="make/lib/jogl/jogl-all.jar" sourcepath="make/lib/jogl/jogl-java-src.zip"/>
+	<classpathentry kind="lib" path="make/lib/jython/jython-standalone-2.5.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

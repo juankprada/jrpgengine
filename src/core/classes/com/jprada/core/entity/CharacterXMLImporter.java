@@ -11,6 +11,8 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import com.jprada.core.entity.utils.CollideBox;
+import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.Animation;
 import com.jprada.core.graphics.Sprite;
 import com.jprada.core.graphics.SpriteFrame;
@@ -28,7 +30,7 @@ public class CharacterXMLImporter {
 		CharacterXMLImporter.sprites = new HashMap<String, Sprite>();
 		CharacterXMLImporter.animations = new HashMap<String, Animation>();
 		Entity character = null;
-		if (type.equals(PlayableCharacter.class)) {
+		if (type.equals(GameCharacter.class)) {
 			character = loadCharacterFromXML(charSheet);
 			character.fixStandingDireciton();
 		}
@@ -45,7 +47,7 @@ public class CharacterXMLImporter {
 	}
 	
 	private static Entity loadCharacterFromXML(String charSheet) {
-		PlayableCharacter character = new PlayableCharacter();
+		GameCharacter character = new GameCharacter();
 		
 		try {
 			XMLStreamReader xmlsr = loadXMLFile(charSheet);

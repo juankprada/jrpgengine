@@ -30,7 +30,7 @@ import com.jogamp.opengl.util.AnimatorBase;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jprada.core.entity.CharacterXMLImporter;
-import com.jprada.core.entity.PlayableCharacter;
+import com.jprada.core.entity.GameCharacter;
 import com.jprada.core.entity.MapObject.Direction;
 import com.jprada.core.graphics.Animation;
 import com.jprada.core.graphics.Sprite;
@@ -49,6 +49,8 @@ public class GameWindow implements GLEventListener {
     private static int windowWidth = 600;
 
     private static boolean fullscreen=false;
+    
+    public static boolean ENABLE_DEBUG_INFO = false;
 
     // Clear Color definition
     private static float clearColor_r;
@@ -87,7 +89,7 @@ public class GameWindow implements GLEventListener {
     private TextRenderer renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 12));
 
     // current game state
-    private GameState currentGameState = null;
+    public static GameState currentGameState = null;
 
     Random randomGenerator = new Random();
 
@@ -257,13 +259,13 @@ public class GameWindow implements GLEventListener {
             }
         });
 
-        Animator ani = new Animator(canvas);
-        ani.setRunAsFastAsPossible(true);
-        animator = ani;
-//        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
+//        Animator ani = new Animator(canvas);
+//        ani.setRunAsFastAsPossible(true);
+//        animator = ani;
+        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
        
-//        animator = fpsanimator;
-//        animator.add(canvas);
+        animator = fpsanimator;
+        animator.add(canvas);
         animator.start();
 
     }
