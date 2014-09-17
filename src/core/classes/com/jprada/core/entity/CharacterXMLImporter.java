@@ -1,6 +1,7 @@
 package com.jprada.core.entity;
 
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +31,8 @@ public class CharacterXMLImporter {
 		CharacterXMLImporter.sprites = new HashMap<String, Sprite>();
 		CharacterXMLImporter.animations = new HashMap<String, Animation>();
 		Entity character = null;
-		if (type.equals(GameCharacter.class)) {
-			character = loadCharacterFromXML(charSheet);
+		if (type.equals(GameCharacter.class) || type.equals(Npc.class)) {
+			character = loadCharacterFromXML(charSheet, type);
 			character.fixStandingDireciton();
 		}
 
@@ -46,8 +47,19 @@ public class CharacterXMLImporter {
 		return xif.createXMLStreamReader(xmlDefinition);
 	}
 	
-	private static Entity loadCharacterFromXML(String charSheet) {
-		GameCharacter character = new GameCharacter();
+	private static Entity loadCharacterFromXML(String charSheet, Class<? extends Entity> type) {
+		
+		Entity character;
+		try {
+			character = type.getConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return null;
+		}
+//		GameCharacter character = new GameCharacter();
 		
 		try {
 			XMLStreamReader xmlsr = loadXMLFile(charSheet);

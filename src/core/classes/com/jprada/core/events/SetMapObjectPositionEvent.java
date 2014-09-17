@@ -17,6 +17,7 @@ public class SetMapObjectPositionEvent extends Event {
 	@Override
 	public void execute() {
 		if(!this.isExecuted()) {
+			System.out.println("Me Ejecutaron");
 			obj.setPosition(this.posX, this.posY);
 			this.executed = true;
 		} else {

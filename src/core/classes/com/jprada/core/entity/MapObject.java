@@ -197,6 +197,8 @@ public abstract class MapObject implements Collidable, Interactable{
 	public void setPosition(float x, float y) {
 		this.posX = x;
 		this.posY = y;
+		this.collideBox.onUpdate(this.posX, this.posY);
+		this.interactBox.onUpdate(this.posX, this.posY);
 	}
 	
 	/*

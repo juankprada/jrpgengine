@@ -32,6 +32,10 @@ import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jprada.core.entity.CharacterXMLImporter;
 import com.jprada.core.entity.GameCharacter;
 import com.jprada.core.entity.MapObject.Direction;
+import com.jprada.core.events.EventManager;
+import com.jprada.core.events.JythonManager;
+import com.jprada.core.events.SetPlayerPositionEvent;
+import com.jprada.core.events.WaitEvent;
 import com.jprada.core.graphics.Animation;
 import com.jprada.core.graphics.Sprite;
 import com.jprada.core.graphics.SpriteBatch2;
@@ -67,6 +71,9 @@ public class GameWindow implements GLEventListener {
     private AnimatorBase animator;
     private KeyListener currentKeyListener;
     private MouseListener currentMouseListener;
+    
+    public static EventManager eventManager;
+    private JythonManager scriptManager;
 //    private Frame frame;
 
 
@@ -285,6 +292,9 @@ public class GameWindow implements GLEventListener {
             // update game state
 
             if (currentGameState != null) {
+            	
+            	eventManager.update();
+            	
                 currentGameState.onUpdate(gl);
 //                System.out.println("LLego");
             }
@@ -347,6 +357,13 @@ public class GameWindow implements GLEventListener {
        currentGameState.onInit(gl);
        
        canvas.addKeyListener(currentGameState.getKeyListener());
+       
+       eventManager = EventManager.getEventManager();
+       scriptManager.initJythonInterpreter();
+       
+       
+      
+       
     }
 
    

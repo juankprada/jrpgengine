@@ -26,9 +26,11 @@ public class ObjectInteraction {
 		for(ObjectInteraction oi : ObjectInteractionList) {
 			if(oi.a == null || oi.b == null) continue;
 			
-			if(oi.a.onInteract(oi.b)) {
-				oi.b.onInteract(oi.b);
-			}
+			oi.a.onInteract(oi.b);
+			oi.b.onInteract(oi.a);
+//			if(oi.a.onInteract(oi.b)) {
+//				oi.b.onInteract(oi.b);
+//			}
 		}
 		
 		ObjectInteractionList.clear();

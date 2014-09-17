@@ -1,5 +1,6 @@
 package com.jprada.core.states;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.media.opengl.GL;
@@ -15,10 +16,10 @@ import com.jprada.core.entity.MapObject;
  */
 public abstract class GameState {
 
-	public static Character PLAYER;
-	public static List<MapObject> OBJECTS_LIST;
-	public static List<Entity> ENTITIES_LIST;
-	
+	public static GameCharacter PLAYER;	
+	public static List<MapObject> OBJECTS_LIST = new ArrayList<MapObject>();
+	public static List<Entity> ENTITIES_LIST = new ArrayList<Entity>();
+	public static boolean INPUT_DISABLED = false;
 	
 	public static void stopAllEntities() {
 		for(Entity ent : ENTITIES_LIST) {
