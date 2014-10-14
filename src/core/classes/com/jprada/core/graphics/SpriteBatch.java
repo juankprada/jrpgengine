@@ -181,20 +181,24 @@ public class SpriteBatch {
     }
 
     public void draw(GL gl, SpriteFrame region, float posx, float posy, GLColor color) {
-    	this.draw(gl, region, posx, posy, color, 0.0f);
+    	this.draw(gl, region, posx, posy, color, 1.0f, 1.0f);
     }
     
-    public void draw(GL gl, SpriteFrame region, float posx, float posy, GLColor color, float angle) {
+    public void draw(GL gl, SpriteFrame region, float posx, float posy, GLColor color, float scaleX, float scaleY) {
+    	this.draw(gl, region, posx, posy, color, scaleX, scaleY, 0.0f);
+    }
+    
+    public void draw(GL gl, SpriteFrame region, float posx, float posy, GLColor color, float scaleX, float scaleY, float angle) {
     	float originX = region.getRegionWidth() / 2;
     	float originY = region.getRegionHeight() / 2;
-    	this.draw(gl, region, posx, posy, color, angle, originX, originY);
+    	this.draw(gl, region, posx, posy, color, scaleX, scaleY, angle, originX, originY);
     }
     
-    public void draw(GL gl, SpriteFrame region, float posx, float posy, GLColor color, float angle, float originX, float originY) {
-    	this.draw(gl, region, posx, posy, color, angle, originX, originY, 1.0f);
+    public void draw(GL gl, SpriteFrame region, float posx, float posy, GLColor color, float scaleX, float scaleY, float angle, float originX, float originY) {
+    	this.draw(gl, region, posx, posy, color, scaleX, scaleY, angle, originX, originY, 1.0f);
     }
 
-    public void draw(GL gl, SpriteFrame region, float posx, float posy, GLColor color, float angle, float originX, float originY, float size) {
+    public void draw(GL gl, SpriteFrame region, float posx, float posy, GLColor color, float scaleX, float scaleY, float angle, float originX, float originY, float size) {
         if (!drawing)
             throw new IllegalStateException(
                     "SpriteBatch.begin() must be called before draw ");
@@ -213,10 +217,17 @@ public class SpriteBatch {
 
         final float worldOriginX = posx + originX;
         final float worldOriginY = posy + originY;
-        final float fx = -originX;
-        final float fy = -originY;
-        final float fx2 = region.getRegionWidth() - originX;
-        final float fy2 = region.getRegionHeight() - originY;
+        float fx = -originX;
+        float fy = -originY;
+        float fx2 = region.getRegionWidth() - originX;
+        float fy2 = region.getRegionHeight() - originY;
+        
+        if(scaleX != 1 || scaleY !=1) {
+        	fx *= scaleX;
+        	fy *= scaleY;
+        	fx2 *= scaleX;
+        	fy2 *= scaleY;
+        }
         
         final float p1x = fx;
         final float p1y = fy;
@@ -334,17 +345,21 @@ public class SpriteBatch {
     }
 
     public void draw(GL gl,  Sprite sprite, float posx, float posy, GLColor color) {
-    	this.draw(gl, sprite, posx, posy, color, 0.0f);
+    	this.draw(gl, sprite, posx, posy, color, 1.0f, 1.0f);
     }
     
-    public void draw(GL gl,  Sprite sprite, float posx, float posy, GLColor color, float angle) {
+    public void draw(GL gl,  Sprite sprite, float posx, float posy, GLColor color, float scaleX, float scaleY) {
+    	this.draw(gl, sprite, posx, posy, color, scaleX, scaleY,  0.0f);
+    }
+    
+    public void draw(GL gl,  Sprite sprite, float posx, float posy, GLColor color, float scaleX, float scaleY, float angle) {
     	float originX = sprite.getTexture().getImageWidth() / 2;
     	float originY = sprite.getTexture().getImageHeight() / 2;
-    	this.draw(gl, sprite, posx, posy, color, angle, originX, originY);
+    	this.draw(gl, sprite, posx, posy, color, scaleX, scaleY, angle, originX, originY);
     }
     
-    public void draw(GL gl,  Sprite sprite, float posx, float posy, GLColor color, float angle, float originX, float originY) {
-    	this.draw(gl, sprite.getFrame(0, 0, sprite.getTexture().getImageWidth(), sprite.getTexture().getImageHeight()), posx, posy, color, angle, originX, originY, 1.0f);
+    public void draw(GL gl,  Sprite sprite, float posx, float posy, GLColor color, float scaleX, float scaleY, float angle, float originX, float originY) {
+    	this.draw(gl, sprite.getFrame(0, 0, sprite.getTexture().getImageWidth(), sprite.getTexture().getImageHeight()), posx, posy, color, scaleX, scaleY, angle, originX, originY, 1.0f);
     }
 
     public void end(GL gl) {

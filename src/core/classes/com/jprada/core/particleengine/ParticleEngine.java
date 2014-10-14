@@ -73,10 +73,10 @@ public class ParticleEngine {
 		float speedY = 1f * (float)(random.nextDouble() * 2 -1);
 		
 		float angle = 0;
-//		float angularVelocity = 20.0f;
+
 		float angularVelocity = 5 * (float)(random.nextDouble() * 2 -1);
 		GLColor color = new GLColor(random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat());
-//		GLColor color = new GLColor(0.5f, 0.5f, 0.5f, 0.5f);
+
 		float size = (float)random.nextDouble();
 		int ttl = 20 + random.nextInt(40);
 		
