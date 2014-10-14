@@ -55,8 +55,8 @@ public class OutTransition implements Transition {
 		gl2.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
 		batch.begin(gl);
-		batch.setRenderColor((col.getRed() / 255) + alpha, (col.getGreen() / 255)
-				+ alpha, (col.getBlue() / 255) + alpha, 1);
+//		batch.setRenderColor((col.getRed() / 255) + alpha, (col.getGreen() / 255)
+//				+ alpha, (col.getBlue() / 255) + alpha, 1);
 		batch.end(gl);
 		// FIXME: Change hard coded vertex
 //		gl2.glColor4f((col.getRed() / 255) + alpha, (col.getGreen() / 255)

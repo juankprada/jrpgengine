@@ -38,7 +38,7 @@ import com.jprada.core.events.SetPlayerPositionEvent;
 import com.jprada.core.events.WaitEvent;
 import com.jprada.core.graphics.Animation;
 import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteBatch2;
+import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.graphics.SpriteFrame;
 import com.jprada.core.states.GameState;
 import com.jprada.core.states.WorldMapState;

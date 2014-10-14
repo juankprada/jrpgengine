@@ -9,12 +9,10 @@ import javax.media.opengl.GL;
 
 import com.jprada.core.entity.utils.CollideBox;
 import com.jprada.core.entity.utils.InteractBox;
-import com.jprada.core.entity.utils.ObjectInteraction;
 import com.jprada.core.graphics.Animation;
+import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteBatch2;
-import com.jprada.core.graphics.SpriteFrame;
-import com.jprada.core.states.WorldMapState;
+import com.jprada.core.graphics.SpriteBatch;
 
 /**
  * Created By: Juankprada Date: 10/5/12 Time: 4:43 PM
@@ -138,9 +136,11 @@ public abstract class MapObject implements Collidable, Interactable{
 
 	public abstract void onDestroy();
 
-	public abstract void onRender(GL gl, SpriteBatch2 batch,
+	public abstract void onRender(GL gl, SpriteBatch batch,
 			double interpolation);
 
+	public abstract void onRenderDebug(GL gl, LineBatch batch, double interpolation);
+	
 	public abstract void onUpdate();
 
 	public void setAnimations(Map<String, Animation> animations) {

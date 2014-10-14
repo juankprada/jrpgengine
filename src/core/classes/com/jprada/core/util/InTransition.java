@@ -59,8 +59,8 @@ public class InTransition implements Transition {
 
 		// FIXME: Use an empty texture to draw the screen black and fade instead of setting color for every other texture
 		batch.begin(gl);
-		batch.setRenderColor((col.getRed() / 255) + alpha, (col.getGreen() / 255)
-				+ alpha, (col.getBlue() / 255) + alpha, 1);
+//		batch.setRenderColor((col.getRed() / 255) + alpha, (col.getGreen() / 255)
+//				+ alpha, (col.getBlue() / 255) + alpha, 1);
 		
 
 		batch.end(gl);

@@ -4,7 +4,7 @@ import javax.media.opengl.GL;
 import javax.script.ScriptException;
 
 import com.jprada.core.events.JythonManager;
-import com.jprada.core.graphics.SpriteBatch2;
+import com.jprada.core.graphics.SpriteBatch;
 
 public class Npc extends GameCharacter {
 
