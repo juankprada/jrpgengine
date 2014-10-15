@@ -34,6 +34,8 @@ public class WorldMapState extends GameState {
 	private KeyListener keyListener;
 	
 	ParticleEngine particleEngine;
+	ParticleEngine particleEngine2;
+	ParticleEngine particleEngine3;
 
 	@Override
 	public KeyListener getKeyListener() {
@@ -74,6 +76,8 @@ public class WorldMapState extends GameState {
 		this.keyListener = new WorldMapKeyListener(PLAYER);
 		
 		particleEngine = new ParticleEngine(null, 200, 200);
+		particleEngine2 = new ParticleEngine(null, 200, 200);
+		particleEngine3 = new ParticleEngine(null, 400, 220);
 
 	}
 
@@ -103,6 +107,8 @@ public class WorldMapState extends GameState {
 		particleEngine.setEmiterLocationX(PLAYER.getPosX() +24);
 		particleEngine.setEmiterLocationY(PLAYER.getPosY() +32);
 		particleEngine.update();
+		particleEngine2.update();
+		particleEngine3.update();
 	}
 
 	@Override
@@ -114,11 +120,19 @@ public class WorldMapState extends GameState {
 	public void onRender(GL gl, double interpolation) {
 		// TODO Auto-generated method stub
 		
+		int total = particleEngine.getParticles().size() + particleEngine2.getParticles().size() + particleEngine3.getParticles().size();
+		
+		
+		
 		particleEngine.draw(gl, spriteBatch);
+		particleEngine2.draw(gl, spriteBatch);
+		particleEngine3.draw(gl, spriteBatch);
+	
+		
 		this.worldMapObjects = RadixSort.sortEntities(this.worldMapObjects);
 		
 		
-//		spriteBatch.setRenderColor(1f, 1f, 1f, 1f);
+
 		spriteBatch.begin(gl);
 		for (MapObject mo : this.worldMapObjects) {
 			mo.onRender(gl, spriteBatch, interpolation);

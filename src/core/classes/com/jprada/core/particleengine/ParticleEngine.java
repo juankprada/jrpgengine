@@ -27,6 +27,14 @@ public class ParticleEngine {
 		this.random = new Random();
 	}
 	
+	public List<Particle> getParticles() {
+		return particles;
+	}
+
+	public void setParticles(List<Particle> particles) {
+		this.particles = particles;
+	}
+
 	public void update() {
 		int total = 10;
 		
@@ -43,27 +51,29 @@ public class ParticleEngine {
 				it.remove();
 			}
 		}		
+		
+		
 	}
 	
 	
 	private Particle generateNewParticle() {
 		int partSprite = random.nextInt(3);
 		Sprite sp = null;
-		switch(partSprite) {
-		case 0:
+//		switch(partSprite) {
+//		case 0:
 			sp = new Sprite("star.png");
-			break;
-		case 1:
-			sp = new Sprite("circle.png");
-			break;
-		case 2: 
-			sp = new Sprite("diamond.png");
-			break;
-		default:
-			sp = new Sprite("circle.png");
-			break;
-			
-		}
+//			break;
+//		case 1:
+//			sp = new Sprite("circle.png");
+//			break;
+//		case 2: 
+//			sp = new Sprite("diamond.png");
+//			break;
+//		default:
+//			sp = new Sprite("circle.png");
+//			break;
+//			
+//		}
 		
 		
 		float posX = this.emiterLocationX;
@@ -78,13 +88,14 @@ public class ParticleEngine {
 		GLColor color = new GLColor(random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat());
 
 		float size = (float)random.nextDouble();
-		int ttl = 20 + random.nextInt(40);
+		int ttl = 20 + random.nextInt(60);
 		
 		return new Particle(sp, posX, posY, speedX, speedY, angle, angularVelocity, color, size, ttl);
 	}
 	
 	
 	public void draw(GL gl, SpriteBatch batch) {
+		
 		batch.begin(gl);
 		
 		for(int i=0; i< particles.size(); i++) {

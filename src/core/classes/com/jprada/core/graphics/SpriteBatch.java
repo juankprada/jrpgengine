@@ -399,6 +399,7 @@ public class SpriteBatch {
         if (vertices.length <= 0)
             return;
 
+        gl.getGL2().glDisable(GL2.GL_DEPTH_BUFFER_BIT);
         gl.getGL2().glEnable(GL2.GL_TEXTURE_2D);
         gl.getGL2().glEnable(GL2.GL_BLEND);
         gl.getGL2().glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
@@ -432,9 +433,9 @@ public class SpriteBatch {
         gl.getGL2().glBindBuffer(GL2.GL_ARRAY_BUFFER, buffers[VERTICES_BUFFER]);
         gl.getGL2().glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, buffers[INDICES_BUFFER]);
 
-//        gl.getGL2().glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
-//        gl.getGL2().glEnableClientState(GL2.GL_NORMAL_ARRAY);
-//        gl.getGL2().glEnableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.getGL2().glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+        gl.getGL2().glEnableClientState(GL2.GL_NORMAL_ARRAY);
+        gl.getGL2().glEnableClientState(GL2.GL_VERTEX_ARRAY);
 
         gl.getGL2().glBufferData(GL2.GL_ARRAY_BUFFER, numBytes, realVertex, GL2.GL_STATIC_DRAW);
 
@@ -456,9 +457,9 @@ public class SpriteBatch {
         gl.getGL2().glDrawElements(GL2.GL_QUADS, numOfIndices, GL2.GL_UNSIGNED_INT, 0L);
 
 
-//        gl.getGL2().glDisableClientState(GL2.GL_VERTEX_ARRAY);
-//        gl.getGL2().glDisableClientState(GL2.GL_NORMAL_ARRAY);
-//        gl.getGL2().glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+        gl.getGL2().glDisableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.getGL2().glDisableClientState(GL2.GL_NORMAL_ARRAY);
+        gl.getGL2().glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 
       
 

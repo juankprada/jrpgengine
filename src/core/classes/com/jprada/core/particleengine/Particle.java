@@ -20,6 +20,8 @@ public class Particle {
 	private int ttl;
 	private float scaleX;
 	private float scaleY;
+	private float originX;
+	private float originY;
 	
 	
 	public Particle(Sprite sprite, float posx, float posy, float speedX, float speedY, float angle, float angularVelocity, GLColor color, float size, int ttl) {
@@ -35,6 +37,8 @@ public class Particle {
 		this.ttl = ttl;
 		this.scaleX = 0.0f;
 		this.scaleY = 0.0f;
+		originX = this.sprite.getTexture().getImageWidth() / 2;
+		originY = this.sprite.getTexture().getImageHeight() / 2;
 	}
 	
 	public void update() {
@@ -48,8 +52,7 @@ public class Particle {
 	}
 	
 	public void draw(GL gl, SpriteBatch batch) {
-		float originX = this.sprite.getTexture().getImageWidth() / 2;
-		float originY = this.sprite.getTexture().getImageHeight() / 2;
+		
 		
 		
 		batch.draw(gl, sprite, posX, posY, color, scaleX, scaleY, this.angle);

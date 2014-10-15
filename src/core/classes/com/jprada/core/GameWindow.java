@@ -266,13 +266,13 @@ public class GameWindow implements GLEventListener {
             }
         });
 
-//        Animator ani = new Animator(canvas);
-//        ani.setRunAsFastAsPossible(true);
-//        animator = ani;
-        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
+        Animator ani = new Animator(canvas);
+        ani.setRunAsFastAsPossible(true);
+        animator = ani;
+//        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
        
-        animator = fpsanimator;
-        animator.add(canvas);
+//        animator = fpsanimator;
+//        animator.add(canvas);
         animator.start();
 
     }
