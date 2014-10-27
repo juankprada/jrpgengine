@@ -1,2 +1,6 @@
-/bin/
-/build/
+/bin
+/bin/*
+/build
+/build/*
+/out
+/out/*

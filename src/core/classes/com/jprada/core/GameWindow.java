@@ -1,23 +1,7 @@
 package com.jprada.core;
 
 
-import java.awt.Font;
-import java.awt.Frame;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
-
-import com.jogamp.newt.Display;
-import com.jogamp.newt.MonitorDevice;
-import com.jogamp.newt.MonitorMode;
-import com.jogamp.newt.NewtFactory;
-import com.jogamp.newt.Screen;
+import com.jogamp.newt.*;
 import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
@@ -27,21 +11,16 @@ import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.newt.util.MonitorModeUtil;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.AnimatorBase;
-import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
-import com.jprada.core.entity.CharacterXMLImporter;
-import com.jprada.core.entity.GameCharacter;
-import com.jprada.core.entity.MapObject.Direction;
 import com.jprada.core.events.EventManager;
 import com.jprada.core.events.JythonManager;
-import com.jprada.core.events.SetPlayerPositionEvent;
-import com.jprada.core.events.WaitEvent;
-import com.jprada.core.graphics.Animation;
-import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteBatch;
-import com.jprada.core.graphics.SpriteFrame;
 import com.jprada.core.states.GameState;
 import com.jprada.core.states.WorldMapState;
+
+import javax.media.opengl.*;
+import java.awt.*;
+import java.util.List;
+import java.util.Random;
 
 
 

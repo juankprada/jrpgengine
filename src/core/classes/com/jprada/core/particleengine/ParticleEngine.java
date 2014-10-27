@@ -17,6 +17,7 @@ public class ParticleEngine {
 	private float emiterLocationX;
 	private float emiterLocationY;
 	private List<Particle> particles;
+	private Sprite particleSprite;
 //	private List<Sprite> textures;
 	
 	public ParticleEngine(List<Sprite> textures, float posx, float posy) {
@@ -25,6 +26,7 @@ public class ParticleEngine {
 		this.emiterLocationY = posy;
 		this.particles = new ArrayList<Particle>();
 		this.random = new Random();
+		this.particleSprite = new Sprite("flash.png");
 	}
 	
 	public List<Particle> getParticles() {
@@ -59,36 +61,23 @@ public class ParticleEngine {
 	private Particle generateNewParticle() {
 		int partSprite = random.nextInt(3);
 		Sprite sp = null;
-//		switch(partSprite) {
-//		case 0:
-			sp = new Sprite("star.png");
-//			break;
-//		case 1:
-//			sp = new Sprite("circle.png");
-//			break;
-//		case 2: 
-//			sp = new Sprite("diamond.png");
-//			break;
-//		default:
-//			sp = new Sprite("circle.png");
-//			break;
-//			
-//		}
+
+			sp = this.particleSprite;
 		
 		
 		float posX = this.emiterLocationX;
 		float posY = this.emiterLocationY;
 		
-		float speedX = 1f * (float)(random.nextDouble() * 2 -1);
-		float speedY = 1f * (float)(random.nextDouble() * 2 -1);
+		float speedX = 0.5f * (float)(random.nextDouble() * 2 -random.nextDouble());
+		float speedY = 1f * (float)(random.nextDouble() * 2);
 		
-		float angle = 0;
+		float angle = random.nextInt(360);
 
 		float angularVelocity = 5 * (float)(random.nextDouble() * 2 -1);
-		GLColor color = new GLColor(random.nextFloat(), random.nextFloat(), random.nextFloat(), random.nextFloat());
+		GLColor color = new GLColor(0.596f, 0.164f, 0.0f, random.nextFloat());
 
-		float size = (float)random.nextDouble();
-		int ttl = 20 + random.nextInt(60);
+		float size = 1.0f;
+		int ttl = 60 + random.nextInt(20);
 		
 		return new Particle(sp, posX, posY, speedX, speedY, angle, angularVelocity, color, size, ttl);
 	}
@@ -96,6 +85,7 @@ public class ParticleEngine {
 	
 	public void draw(GL gl, SpriteBatch batch) {
 		
+		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE);
 		batch.begin(gl);
 		
 		for(int i=0; i< particles.size(); i++) {
@@ -103,6 +93,7 @@ public class ParticleEngine {
 		}
 		
 		batch.end(gl);
+		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE_MINUS_SRC_ALPHA);
 		
 	}
 

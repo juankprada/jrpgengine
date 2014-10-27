@@ -1,11 +1,11 @@
 package com.jprada.core.entity;
 
-import javax.media.opengl.GL;
-
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.util.GLColor;
+
+import javax.media.opengl.GL;
 
 /**
  * Created By: Juankprada Date: 10/5/12 Time: 4:44 PM
@@ -135,7 +135,7 @@ public class GameCharacter extends Entity {
 
 	@Override
 	public void onCollision(Collidable other) {
-		// TODO Auto-generated method stub
+
 
 	}
 

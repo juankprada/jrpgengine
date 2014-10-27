@@ -35,8 +35,8 @@ public class Particle {
 		this.color = color;
 		this.size = size;
 		this.ttl = ttl;
-		this.scaleX = 0.0f;
-		this.scaleY = 0.0f;
+		this.scaleX = 2.0f;
+		this.scaleY = 2.0f;
 		originX = this.sprite.getTexture().getImageWidth() / 2;
 		originY = this.sprite.getTexture().getImageHeight() / 2;
 	}
@@ -44,10 +44,15 @@ public class Particle {
 	public void update() {
 		ttl --;
 		posX+=speedX;
-		posY+= speedY;
+		posY-= speedY;
 		angle+=angularVelocity +10;
-		scaleX+=0.03f;
-		scaleY+=0.03f;
+		scaleX-=0.03f;
+		scaleY-=0.03f;
+		
+		if(scaleX < 0) 
+			scaleX = 0;
+		if(scaleY < 0)
+			scaleY = 0;
 		
 	}
 	

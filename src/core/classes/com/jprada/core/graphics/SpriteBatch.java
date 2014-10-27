@@ -393,6 +393,13 @@ public class SpriteBatch {
 
     }
 
+    private Integer sfactor;
+    private Integer dfactor;
+    
+    public void setBlendFunc(int sfactor, int dfactor) {
+    	this.sfactor = sfactor;
+    	this.dfactor = dfactor;
+    }
 
     public void render(GL gl) {
 
@@ -402,7 +409,11 @@ public class SpriteBatch {
         gl.getGL2().glDisable(GL2.GL_DEPTH_BUFFER_BIT);
         gl.getGL2().glEnable(GL2.GL_TEXTURE_2D);
         gl.getGL2().glEnable(GL2.GL_BLEND);
-        gl.getGL2().glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+        
+        if(this.sfactor == null || this.dfactor == null)
+        	gl.getGL2().glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+        else
+        	gl.getGL2().glBlendFunc(this.sfactor, this.dfactor);
 
         if (currentTexture != null) {
             currentTexture.bind(gl);

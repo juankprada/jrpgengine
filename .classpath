@@ -4,19 +4,14 @@
 	<classpathentry kind="src" path="src/editor/classes"/>
 	<classpathentry kind="src" path="src/game/classes"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="make/lib/gluegen/gluegen-rt-natives-linux-amd64.jar"/>
-	<classpathentry kind="lib" path="make/lib/gluegen/gluegen-rt-natives-linux-i586.jar"/>
-	<classpathentry kind="lib" path="make/lib/gluegen/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gluegen"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/joal"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jogl"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jython"/>
+	<classpathentry kind="lib" path="make/lib/gluegen/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="make/lib/gluegen/gluegen-rt-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="make/lib/gluegen/gluegen-rt-natives-windows-i586.jar"/>
-	<classpathentry kind="lib" path="make/lib/gluegen/gluegen-rt.jar" sourcepath="make/lib/gluegen/gluegen-java-src.zip"/>
-	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-android-armv6.jar"/>
-	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-linux-amd64.jar"/>
-	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-linux-i586.jar"/>
-	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-macosx-universal.jar"/>
-	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="make/lib/jogl/jogl-all.jar" sourcepath="make/lib/jogl/jogl-java-src.zip"/>
+	<classpathentry kind="lib" path="make/lib/jogl/jogl-all-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="make/lib/jython/jython-standalone-2.5.3.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="out/production/RPGGameEngine"/>
 </classpath>

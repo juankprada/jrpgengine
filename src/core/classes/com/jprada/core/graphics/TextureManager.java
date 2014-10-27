@@ -5,6 +5,7 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 import com.jprada.core.util.ResourceManager;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GLException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +32,6 @@ public class TextureManager {
 			
 			loadedTextures.put(image.getName(), texture);
 		} catch (GLException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -52,11 +52,19 @@ public class TextureManager {
 					"png");
 			loadedTextures.put(textureName, texture);
 		} catch (GLException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return texture;
 	}
 
+    public static void disposeTexture(GL gl, String textureName) {
+        if (loadedTextures.containsKey(textureName)) {
+            disposeTexture(gl,loadedTextures.get(textureName));
+        }
+    }
+
+    public static void disposeTexture(GL gl, Texture texture) {
+        texture.destroy(gl);
+    }
 }

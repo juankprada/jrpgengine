@@ -1,28 +1,25 @@
 package com.jprada.core.states;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.media.opengl.GL;
-import javax.script.ScriptException;
-
-import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jprada.core.GameWindow;
 import com.jprada.core.entity.CharacterXMLImporter;
 import com.jprada.core.entity.GameCharacter;
 import com.jprada.core.entity.MapObject;
-import com.jprada.core.entity.MapObject.Direction;
 import com.jprada.core.entity.Npc;
+import com.jprada.core.entity.map.Tile;
+import com.jprada.core.entity.map.TileMap;
 import com.jprada.core.entity.utils.ObjectInteraction;
-import com.jprada.core.events.JythonManager;
 import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.particleengine.ParticleEngine;
 import com.jprada.core.states.input.WorldMapKeyListener;
-import com.jprada.core.util.GLColor;
 import com.jprada.core.util.algorithm.RadixSort;
+
+import javax.media.opengl.GL;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WorldMapState extends GameState {
 
@@ -36,6 +33,10 @@ public class WorldMapState extends GameState {
 	ParticleEngine particleEngine;
 	ParticleEngine particleEngine2;
 	ParticleEngine particleEngine3;
+
+//    Tile[][] tileArray = new Tile[25][19];
+	
+	TileMap tmap;
 
 	@Override
 	public KeyListener getKeyListener() {
@@ -79,12 +80,17 @@ public class WorldMapState extends GameState {
 		particleEngine2 = new ParticleEngine(null, 200, 200);
 		particleEngine3 = new ParticleEngine(null, 400, 220);
 
+		tmap = new TileMap();
+       
+
 	}
 
 	@Override
 	public void onUpdate(GL gl) {
 		ObjectInteraction.executeInteractions();
 
+		tmap.onUpdate();
+     
 		for (MapObject mo : this.worldMapObjects) {
 			mo.onUpdate();
 		}
@@ -120,20 +126,35 @@ public class WorldMapState extends GameState {
 	public void onRender(GL gl, double interpolation) {
 		// TODO Auto-generated method stub
 		
+		tmap.onRender(gl, spriteBatch, interpolation);
+		
 		int total = particleEngine.getParticles().size() + particleEngine2.getParticles().size() + particleEngine3.getParticles().size();
 		
 		
 		
-		particleEngine.draw(gl, spriteBatch);
-		particleEngine2.draw(gl, spriteBatch);
-		particleEngine3.draw(gl, spriteBatch);
-	
+
+
+
+        spriteBatch.begin(gl);
+//        for(int i=0; i<25; i++) {
+//            for(int j=0; j<19; j++) {
+//                tileArray[i][j].onRender(gl, spriteBatch, interpolation);
+//            }
+//        }
+        spriteBatch.end(gl);
+
+        particleEngine.draw(gl, spriteBatch);
+        particleEngine2.draw(gl, spriteBatch);
+        particleEngine3.draw(gl, spriteBatch);
+
 		
 		this.worldMapObjects = RadixSort.sortEntities(this.worldMapObjects);
 		
 		
 
 		spriteBatch.begin(gl);
+
+
 		for (MapObject mo : this.worldMapObjects) {
 			mo.onRender(gl, spriteBatch, interpolation);
 		}
