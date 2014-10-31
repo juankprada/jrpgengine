@@ -1,32 +1,27 @@
 package com.jprada.core.states;
 
+import javax.media.opengl.GL;
+
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
-import com.jprada.core.GameWindow;
+import com.jprada.core.entity.Actor;
 import com.jprada.core.entity.CharacterXMLImporter;
+import com.jprada.core.entity.Collidable;
 import com.jprada.core.entity.GameCharacter;
-import com.jprada.core.entity.MapObject;
 import com.jprada.core.entity.Npc;
-import com.jprada.core.entity.map.Tile;
 import com.jprada.core.entity.map.TileMap;
 import com.jprada.core.entity.utils.ObjectInteraction;
 import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.particleengine.ParticleEngine;
 import com.jprada.core.states.input.WorldMapKeyListener;
-import com.jprada.core.util.algorithm.RadixSort;
-
-import javax.media.opengl.GL;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WorldMapState extends GameState {
 
 	private SpriteBatch spriteBatch;
 	private LineBatch lineBatch;
 
-	public static List<MapObject> worldMapObjects = new ArrayList<MapObject>();
+//	public static List<Actor> worldMapObjects = new ArrayList<Actor>();
 
 	private KeyListener keyListener;
 	
@@ -36,7 +31,7 @@ public class WorldMapState extends GameState {
 
 //    Tile[][] tileArray = new Tile[25][19];
 	
-	TileMap tmap;
+	public static TileMap currentMap;
 
 	@Override
 	public KeyListener getKeyListener() {
@@ -70,9 +65,9 @@ public class WorldMapState extends GameState {
 		p3.setPosY(220);
 		p3.setOnInteractScript("Wait(2000)\nSetPlayerPosition(300, 300)");
 
-		this.worldMapObjects.add(PLAYER);
-		this.worldMapObjects.add(p2);
-		this.worldMapObjects.add(p3);
+//		this.worldMapObjects.add(PLAYER);
+//		this.worldMapObjects.add(p2);
+//		this.worldMapObjects.add(p3);
 		
 		this.keyListener = new WorldMapKeyListener(PLAYER);
 		
@@ -80,7 +75,15 @@ public class WorldMapState extends GameState {
 		particleEngine2 = new ParticleEngine(null, 200, 200);
 		particleEngine3 = new ParticleEngine(null, 400, 220);
 
-		tmap = new TileMap();
+		currentMap = new TileMap();
+		if(currentMap.getLayers() != null && !currentMap.getLayers().isEmpty()) {
+			PLAYER.setCurrentLayer(0);
+			currentMap.getLayers().get(0).addActor(PLAYER);
+			p2.setCurrentLayer(0);
+			currentMap.getLayers().get(0).addActor(p2);
+			p3.setCurrentLayer(0);
+			currentMap.getLayers().get(0).addActor(p3);
+		}
        
 
 	}
@@ -89,29 +92,29 @@ public class WorldMapState extends GameState {
 	public void onUpdate(GL gl) {
 		ObjectInteraction.executeInteractions();
 
-		tmap.onUpdate();
+		currentMap.onUpdate();
      
-		for (MapObject mo : this.worldMapObjects) {
-			mo.onUpdate();
-		}
+//		for (Actor mo : this.worldMapObjects) {
+//			mo.onUpdate();
+//		}
+//		
+//		
+//
+//		for (Actor mo : WorldMapState.worldMapObjects) {
+//			for (Actor mo2 : WorldMapState.worldMapObjects) {
+//
+//				if (!mo.equals(mo2) && mo.isWantToInteract()
+//						&& mo2.getInteractBox().collides(mo.getCollideBox())) {
+//					ObjectInteraction.ObjectInteractionList
+//							.add(new ObjectInteraction(mo, mo2));
+//				}
+//			}
+//
+//			mo.setWantToInteract(false);
+//		}
 		
-		
-
-		for (MapObject mo : WorldMapState.worldMapObjects) {
-			for (MapObject mo2 : WorldMapState.worldMapObjects) {
-
-				if (!mo.equals(mo2) && mo.isWantToInteract()
-						&& mo2.getInteractBox().collides(mo.getCollideBox())) {
-					ObjectInteraction.ObjectInteractionList
-							.add(new ObjectInteraction(mo, mo2));
-				}
-			}
-
-			mo.setWantToInteract(false);
-		}
-		
-		particleEngine.setEmiterLocationX(PLAYER.getPosX() +24);
-		particleEngine.setEmiterLocationY(PLAYER.getPosY() +32);
+		particleEngine.setEmiterLocationX(PLAYER.getPosition().x +24);
+		particleEngine.setEmiterLocationY(PLAYER.getPosition().y +32);
 		particleEngine.update();
 		particleEngine2.update();
 		particleEngine3.update();
@@ -126,54 +129,56 @@ public class WorldMapState extends GameState {
 	public void onRender(GL gl, double interpolation) {
 		// TODO Auto-generated method stub
 		
-		tmap.onRender(gl, spriteBatch, interpolation);
+		currentMap.onRender(gl, spriteBatch, interpolation);
 		
-		int total = particleEngine.getParticles().size() + particleEngine2.getParticles().size() + particleEngine3.getParticles().size();
+//		int total = particleEngine.getParticles().size() + particleEngine2.getParticles().size() + particleEngine3.getParticles().size();
 		
 		
 		
 
 
 
-        spriteBatch.begin(gl);
+//        spriteBatch.begin(gl);
 //        for(int i=0; i<25; i++) {
 //            for(int j=0; j<19; j++) {
 //                tileArray[i][j].onRender(gl, spriteBatch, interpolation);
 //            }
 //        }
-        spriteBatch.end(gl);
-
+//        spriteBatch.end(gl);
+//
         particleEngine.draw(gl, spriteBatch);
         particleEngine2.draw(gl, spriteBatch);
         particleEngine3.draw(gl, spriteBatch);
 
 		
-		this.worldMapObjects = RadixSort.sortEntities(this.worldMapObjects);
+//		this.worldMapObjects = RadixSort.sortEntities(this.worldMapObjects);
 		
 		
 
-		spriteBatch.begin(gl);
+//		spriteBatch.begin(gl);
 
 
-		for (MapObject mo : this.worldMapObjects) {
-			mo.onRender(gl, spriteBatch, interpolation);
-		}
-		spriteBatch.end(gl);
+//		for (Actor mo : this.worldMapObjects) {
+//			mo.onRender(gl, spriteBatch, interpolation);
+//		}
+//		spriteBatch.end(gl);
 
 		
 		
 		// DEBUG INFO
-		if (GameWindow.ENABLE_DEBUG_INFO) {
-			lineBatch.begin(gl);
-			for (MapObject mo : this.worldMapObjects) {
-				mo.onRenderDebug(gl, lineBatch, interpolation);
-			}
-			lineBatch.end(gl);
-		}
+//		if (GameWindow.ENABLE_DEBUG_INFO) {
+//			lineBatch.begin(gl);
+//			for (Actor mo : this.worldMapObjects) {
+//				mo.onRenderDebug(gl, lineBatch, interpolation);
+//			}
+//			lineBatch.end(gl);
+//		}
 		
 		
 		
 	}
+	
+	
 
 	@Override
 	public void onFinish(GL gl) {

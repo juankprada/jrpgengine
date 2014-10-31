@@ -4,7 +4,7 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jprada.core.GameWindow;
 import com.jprada.core.entity.GameCharacter;
-import com.jprada.core.entity.MapObject.Direction;
+import com.jprada.core.entity.Actor.Direction;
 import com.jprada.core.states.GameState;
 
 public class WorldMapKeyListener implements KeyListener {

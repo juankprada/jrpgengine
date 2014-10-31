@@ -1,12 +1,14 @@
 package com.jprada.core.entity.map;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.jprada.core.util.Vector2;
+import com.jprada.core.entity.Actor;
 
 public class Layer {
 
+	private List<Actor> actorsInLayer;
+	
 	private Integer[][] cels;
 	public boolean render;
 	
@@ -22,6 +24,16 @@ public class Layer {
 		this.cels = new Integer[hCels][vCels];
 	}
 	
+	public void addActor(Actor actor) {
+		if(this.actorsInLayer == null) {
+			this.actorsInLayer = new ArrayList<Actor>();
+		}
+		this.actorsInLayer.add(actor);
+	}
+	
+	public List<Actor> getActors() {
+		return actorsInLayer;
+	}
 	
 	public void addTile(Integer tileId, int xPos, int yPos) {
 

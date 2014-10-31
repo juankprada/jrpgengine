@@ -3,6 +3,7 @@ package com.jprada.core.entity;
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.SpriteBatch;
+import com.jprada.core.states.WorldMapState;
 import com.jprada.core.util.GLColor;
 
 import javax.media.opengl.GL;
@@ -14,29 +15,30 @@ public class GameCharacter extends Entity {
 
 	@Override
 	public void onUpdate() {
-
-		if (this.speedX != 0 || this.speedY != 0) {
+		
+		
+		if (this.speed.x != 0 || this.speed.y != 0) {
 
 			this.collided = false;
-			this.posX += this.speedX;
-			this.posY += this.speedY;
-			this.collideBox.onUpdate(this.posX, this.posY);
+			this.position.x += this.speed.x;
+			this.position.y += this.speed.y;
+			this.collideBox.onUpdate(this.position.x, this.position.y);
 
-			if (!posValid()) {
-				if (this.speedX != 0) {
-					this.posX -= this.speedX;
+			if (!WorldMapState.currentMap.isPosValid(this)) {
+				if (this.speed.x != 0) {
+					this.position.x -= this.speed.x;
 				}
 
-				if (this.speedY != 0) {
-					this.posY -= this.speedY;
+				if (this.speed.y != 0) {
+					this.position.y -= this.speed.y;
 				}
 
 				this.collided = true;
 			}
 
-			this.collideBox.onUpdate(this.posX, this.posY);
+			this.collideBox.onUpdate(this.position.x, this.position.y);
 
-			this.interactBox.onUpdate(this.posX, this.posY);
+			this.interactBox.onUpdate(this.position.x, this.position.y);
 
 		}
 
@@ -51,16 +53,18 @@ public class GameCharacter extends Entity {
 	@Override
 	public void onRender(GL gl, SpriteBatch batch, double interpolation) {
 
-		this.drawX = posX;
-		this.drawY = posY;
+		
+		
+		float drawX = position.x;
+		float drawY = position.y;
 
 		// if it hasn't collided
 		if (!this.collided) {
-			this.drawX += (this.speedX * interpolation);
-			this.drawY += (this.speedY * interpolation);
+			drawX += (this.speed.x * interpolation);
+			drawY += (this.speed.y * interpolation);
 		}
 		
-		batch.draw(gl, this.currentAnimation.getNextFrame(), this.drawX,this.drawY);
+		batch.draw(gl, this.currentAnimation.getNextFrame(), drawX, drawY);
 		// batch.draw(texture, 100, 100);
 
 	}
@@ -84,10 +88,10 @@ public class GameCharacter extends Entity {
 					- this.getCollideBox().getyOffset();
 	
 			if (!this.collided) {
-				x1 += (this.speedX * interpolation);
-				x2 += (this.speedX * interpolation);
-				y1 += (this.speedY * interpolation);
-				y2 += (this.speedY * interpolation);
+				x1 += (this.speed.x * interpolation);
+				x2 += (this.speed.x * interpolation);
+				y1 += (this.speed.y * interpolation);
+				y2 += (this.speed.y * interpolation);
 			}
 			
 			batch.draw(gl, x1, y1, x1, y2);
@@ -112,10 +116,10 @@ public class GameCharacter extends Entity {
 					- this.getInteractBox().getyOffset();
 	
 			if (!this.collided) {
-				x1 += (this.speedX * interpolation);
-				x2 += (this.speedX * interpolation);
-				y1 += (this.speedY * interpolation);
-				y2 += (this.speedY * interpolation);
+				x1 += (this.speed.x * interpolation);
+				x2 += (this.speed.x * interpolation);
+				y1 += (this.speed.y * interpolation);
+				y2 += (this.speed.y * interpolation);
 			}
 			
 			batch.draw(gl, x1, y1, x1, y2);
@@ -195,5 +199,11 @@ public class GameCharacter extends Entity {
 		this.wantToInteract = false;
 
 		return false;
+	}
+
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		
 	}
 }

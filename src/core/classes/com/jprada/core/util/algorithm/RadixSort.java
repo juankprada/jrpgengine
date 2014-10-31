@@ -3,11 +3,11 @@ package com.jprada.core.util.algorithm;
 import java.util.Arrays;
 import java.util.List;
 
-import com.jprada.core.entity.MapObject;
+import com.jprada.core.entity.Actor;
 
 public final class RadixSort {
 
-	public static int maxYPos(MapObject[] arr) {
+	public static int maxYPos(Actor[] arr) {
 		Integer maxValue = 0;
 
 		for (int i = 0; i < arr.length; i++) {
@@ -56,11 +56,11 @@ public final class RadixSort {
 		}
 	}
 
-	public static List<MapObject> sortEntities(List<MapObject> CharacterList) {
-		MapObject[] arr = CharacterList.toArray(new MapObject[0]);
+	public static List<Actor> sortEntities(List<Actor> CharacterList) {
+		Actor[] arr = CharacterList.toArray(new Actor[0]);
 		int bits = maxYPos(arr);
-		MapObject[] earr = new MapObject[arr.length];
-		MapObject[] earr_origi = earr;
+		Actor[] earr = new Actor[arr.length];
+		Actor[] earr_origi = earr;
 		int rshift = 0;
 
 		for (int mask = ~(-1 << bits); mask != 0; mask <<= bits, rshift += bits) {
@@ -91,7 +91,7 @@ public final class RadixSort {
 				earr[cntarray[key]] = arr[p];
 			}
 
-			MapObject[] temp = earr;
+			Actor[] temp = earr;
 
 			earr = arr;
 			arr = temp;

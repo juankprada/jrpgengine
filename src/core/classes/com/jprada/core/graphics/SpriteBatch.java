@@ -50,8 +50,9 @@ public class SpriteBatch {
     private boolean blendingDisabled = false;
 
     /* Interleaved Vertex Array (VVCCCCTT) */
-    private float[]  vertices = new float[MAX_QUADS * VERTEX_ELEMENTS];
-    private int numOfVertices;
+    private float[]  vertices = new float[MAX_QUADS * INDICES_PER_QUAD * VERTEX_ELEMENTS];
+    private int numOfVerticesElements;
+    private int numberOfQuads;
     private int[] indices;
 
     private int numOfIndices=0;
@@ -90,7 +91,8 @@ public class SpriteBatch {
 
     public void setup(GL gl, ShaderProgram shader) {
         this.shader = shader;
-        numOfVertices = 0;
+        numOfVerticesElements = 0;
+        numberOfQuads = 0;
         numOfIndices = 0;
         numOfSpritesInBatch = 0;
 
@@ -207,7 +209,7 @@ public class SpriteBatch {
 
         if (texture != currentTexture) {
             switchTexture(gl, texture);
-        } else if (numOfVertices >= (MAX_QUADS * VERTEX_ELEMENTS) - 1 ) {
+        } else if ((numberOfQuads) == (MAX_QUADS-1 ) ) {
             render(gl);
         }
         
@@ -285,7 +287,7 @@ public class SpriteBatch {
 //        final float fx2 = (posx + region.getRegionWidth());
 //        final float fy2 = (posy + region.getRegionHeight());
 
-        int i = numOfVertices;
+        int i = numOfVerticesElements;
 
         /* vertex 1 */
         vertices[i++] = x1;
@@ -330,7 +332,8 @@ public class SpriteBatch {
         vertices[i++] = region.getV2();
 
 
-        numOfVertices += VERTEX_ARRAY_ELEMENTS;
+        numOfVerticesElements += VERTEX_ARRAY_ELEMENTS;
+        numberOfQuads++;
         numOfIndices += INDICES_PER_QUAD;
         numOfSpritesInBatch++;
     }
@@ -388,7 +391,7 @@ public class SpriteBatch {
 
 
         drawing = false;
-
+      
         renderCalls = 0;
 
     }
@@ -419,10 +422,10 @@ public class SpriteBatch {
             currentTexture.bind(gl);
         }
 
-        float[] vertices = Arrays.copyOfRange(this.vertices, 0, numOfVertices);
+        float[] vertices = Arrays.copyOfRange(this.vertices, 0, numOfVerticesElements);
 
         // Float buffer for vertex data
-        FloatBuffer realVertex = Buffers.newDirectFloatBuffer(numOfVertices);
+        FloatBuffer realVertex = Buffers.newDirectFloatBuffer(numOfVerticesElements);
         realVertex.put(vertices);
         realVertex.position(0);
 
@@ -472,14 +475,15 @@ public class SpriteBatch {
         gl.getGL2().glDisableClientState(GL2.GL_NORMAL_ARRAY);
         gl.getGL2().glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 
-      
-
-        vertices = new float[MAX_QUADS * VERTEX_ELEMENTS];
+        
+        vertices = new float[MAX_QUADS * INDICES_PER_QUAD * VERTEX_ELEMENTS];
         numOfSpritesInBatch = 0;
         numOfIndices = 0;
-        numOfVertices = 0;
+        numOfVerticesElements = 0;
+        numberOfQuads = 0;
         renderCalls++;
-
+        
+        
        
     }
 

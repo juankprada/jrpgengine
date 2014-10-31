@@ -1,7 +1,7 @@
 package com.jprada.core.events;
 
 import com.jprada.core.GameWindow;
-import com.jprada.core.entity.MapObject;
+import com.jprada.core.entity.Actor;
 
 public class SetPlayerPositionEvent extends SetMapObjectPositionEvent {
 

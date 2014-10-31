@@ -3,7 +3,7 @@ package com.jprada.core.entity.map;
 import com.jogamp.opengl.math.VectorUtil;
 import com.jprada.core.entity.Collidable;
 import com.jprada.core.entity.Interactable;
-import com.jprada.core.entity.MapObject;
+import com.jprada.core.entity.Actor;
 import com.jprada.core.graphics.*;
 import com.jprada.core.util.Vector2;
 

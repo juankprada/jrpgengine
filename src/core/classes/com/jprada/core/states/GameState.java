@@ -9,7 +9,7 @@ import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jprada.core.entity.Entity;
 import com.jprada.core.entity.GameCharacter;
-import com.jprada.core.entity.MapObject;
+import com.jprada.core.entity.Actor;
 
 /**
  * Created by Juan Camilo Prada on 25/06/2014.
@@ -17,7 +17,7 @@ import com.jprada.core.entity.MapObject;
 public abstract class GameState {
 
 	public static GameCharacter PLAYER;	
-	public static List<MapObject> OBJECTS_LIST = new ArrayList<MapObject>();
+	public static List<Actor> OBJECTS_LIST = new ArrayList<Actor>();
 	public static List<Entity> ENTITIES_LIST = new ArrayList<Entity>();
 	public static boolean INPUT_DISABLED = false;
 	

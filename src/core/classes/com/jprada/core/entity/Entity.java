@@ -20,7 +20,7 @@ import com.jprada.core.graphics.SpriteFrame;
 import com.jprada.core.states.WorldMapState;
 import com.jprada.core.util.ResourceManager;
 
-public abstract class Entity extends MapObject {
+public abstract class Entity extends Actor {
 
 	protected int moveSpeed = 5;
 
@@ -35,81 +35,75 @@ public abstract class Entity extends MapObject {
 
 	protected void onMove() {
 
-		
-
 		float speedX = 0;
 		float speedY = 0;
-//		Animation currentAnimation = this.currentAnimation;
-//		Direction facingDirection = this.facingDirection;
-		
-			if (this.movingDirection != null) {
-				if (this.movingDirection == Direction.up) {
-					speedY = -moveSpeed;
-					speedX = 0;
-					this.currentAnimation = animations.get("walk-up");
-					this.facingDirection = Direction.up;
 
-				}
-				if (this.movingDirection == Direction.down) {
-					speedX = 0;
-					speedY = moveSpeed;
-					this.currentAnimation = animations.get("walk-down");
-					this.facingDirection = Direction.down;
+		if (this.movingDirection != null) {
+			if (this.movingDirection == Direction.up) {
+				speedY = -moveSpeed;
+				speedX = 0;
+				this.currentAnimation = animations.get("walk-up");
+				this.facingDirection = Direction.up;
 
-				}
-				if (this.movingDirection == Direction.right) {
-					speedY = 0;
-					speedX = moveSpeed;
-					this.currentAnimation = animations.get("walk-right");
-					this.facingDirection = Direction.right;
-
-				}
-				if (this.movingDirection == Direction.left) {
-					speedY = 0;
-					speedX = -moveSpeed;
-					this.currentAnimation = animations.get("walk-left");
-					this.facingDirection = Direction.left;
-
-				}
-				if (this.movingDirection == Direction.upLeft) {
-					speedY = -moveSpeed / 1.5f;
-					speedX = -moveSpeed / 1.5f;
-					this.currentAnimation = animations.get("walk-left");
-					this.facingDirection = Direction.upLeft;
-
-				}
-				if (this.movingDirection == Direction.upRight) {
-					speedY = -moveSpeed / 1.5f;
-					speedX = moveSpeed / 1.5f;
-					this.currentAnimation = animations.get("walk-right");
-					this.facingDirection = Direction.upRight;
-
-				}
-				if (this.movingDirection == Direction.downLeft) {
-					speedY = moveSpeed / 1.5f;
-					speedX = -moveSpeed / 1.5f;
-					this.currentAnimation = animations.get("walk-left");
-					this.facingDirection = Direction.downLeft;
-
-				}
-				if (this.movingDirection == Direction.downRight) {
-					speedY = moveSpeed / 1.5f;
-					speedX = moveSpeed / 1.5f;
-					this.currentAnimation = animations.get("walk-right");
-					this.facingDirection = Direction.downRight;
-				}
-				
-				this.speedX = speedX;
-				this.speedY = speedY;
-			} else {
-				this.stopMoving();
 			}
-		
+			if (this.movingDirection == Direction.down) {
+				speedX = 0;
+				speedY = moveSpeed;
+				this.currentAnimation = animations.get("walk-down");
+				this.facingDirection = Direction.down;
 
-	
+			}
+			if (this.movingDirection == Direction.right) {
+				speedY = 0;
+				speedX = moveSpeed;
+				this.currentAnimation = animations.get("walk-right");
+				this.facingDirection = Direction.right;
+
+			}
+			if (this.movingDirection == Direction.left) {
+				speedY = 0;
+				speedX = -moveSpeed;
+				this.currentAnimation = animations.get("walk-left");
+				this.facingDirection = Direction.left;
+
+			}
+			if (this.movingDirection == Direction.upLeft) {
+				speedY = -moveSpeed / 1.5f;
+				speedX = -moveSpeed / 1.5f;
+				this.currentAnimation = animations.get("walk-left");
+				this.facingDirection = Direction.upLeft;
+
+			}
+			if (this.movingDirection == Direction.upRight) {
+				speedY = -moveSpeed / 1.5f;
+				speedX = moveSpeed / 1.5f;
+				this.currentAnimation = animations.get("walk-right");
+				this.facingDirection = Direction.upRight;
+
+			}
+			if (this.movingDirection == Direction.downLeft) {
+				speedY = moveSpeed / 1.5f;
+				speedX = -moveSpeed / 1.5f;
+				this.currentAnimation = animations.get("walk-left");
+				this.facingDirection = Direction.downLeft;
+
+			}
+			if (this.movingDirection == Direction.downRight) {
+				speedY = moveSpeed / 1.5f;
+				speedX = moveSpeed / 1.5f;
+				this.currentAnimation = animations.get("walk-right");
+				this.facingDirection = Direction.downRight;
+			}
+
+			this.speed.x = speedX;
+			this.speed.y = speedY;
+		} else {
+			this.stopMoving();
+		}
+
 	}
 
-	public void fixStandingDireciton() {
+	protected void fixStandingDireciton() {
 		if (this.facingDirection == Direction.up) {
 			this.currentAnimation = animations.get("standing-up");
 		} else if (this.facingDirection == Direction.down) {
@@ -133,8 +127,8 @@ public abstract class Entity extends MapObject {
 	}
 
 	public void stopMoving() {
-		this.speedX = 0;
-		this.speedY = 0;
+		this.speed.x = 0;
+		this.speed.y= 0;
 		this.movingDirection = null;
 
 		fixStandingDireciton();
@@ -154,20 +148,19 @@ public abstract class Entity extends MapObject {
 		fixStandingDireciton();
 	}
 
-	
-	protected boolean posValid() {
-		boolean posValid = true;
-//		for (MapObject mo : WorldMapState.worldMapObjects) {
-			for (MapObject mo2 : WorldMapState.worldMapObjects) {
-
-				if (!this.equals(mo2) && this.collides(mo2)) {
-					ObjectCollision.ObjectCollisionList
-							.add(new ObjectCollision(this, mo2));
-					posValid = false;
-				}
-			}
-//		}
-
-		return posValid;
-	}
+//	protected boolean posValid() {
+//		boolean posValid = true;
+////		// for (MapObject mo : WorldMapState.worldMapObjects) {
+////		for (Actor mo2 : WorldMapState.worldMapObjects) {
+////
+////			if (!this.equals(mo2) && this.collides(mo2)) {
+////				ObjectCollision.ObjectCollisionList.add(new ObjectCollision(
+////						this, mo2));
+////				posValid = false;
+////			}
+////		}
+////		// }
+//
+//		return posValid;
+//	}
 }

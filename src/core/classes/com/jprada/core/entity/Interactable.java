@@ -1,6 +1,6 @@
 package com.jprada.core.entity;
 
-import com.jprada.core.entity.MapObject.Direction;
+import com.jprada.core.entity.Actor.Direction;
 import com.jprada.core.entity.utils.InteractBox;
 
 public interface Interactable {

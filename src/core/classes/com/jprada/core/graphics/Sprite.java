@@ -68,12 +68,6 @@ public class Sprite {
 
     }
 	
-//	public void Draw( GL gl, SpriteBatch2 batch, int posX, int posY) {
-//
-//        batch.draw(gl, texture, posX, posY);
-//
-//	}
-
     public void setPath(String path) {
         this.path = path;
     }

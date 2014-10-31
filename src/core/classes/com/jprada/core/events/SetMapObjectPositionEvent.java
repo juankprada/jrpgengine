@@ -1,14 +1,14 @@
 package com.jprada.core.events;
 
-import com.jprada.core.entity.MapObject;
+import com.jprada.core.entity.Actor;
 
 public class SetMapObjectPositionEvent extends Event {
 
 	private float posX;
 	private float posY;
-	private MapObject obj;
+	private Actor obj;
 	
-	public SetMapObjectPositionEvent(MapObject obj, float posX, float posY) {
+	public SetMapObjectPositionEvent(Actor obj, float posX, float posY) {
 		this.posX = posX;
 		this.posY = posY;
 		this.obj = obj;
