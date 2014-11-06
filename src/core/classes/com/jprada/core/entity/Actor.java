@@ -1,19 +1,18 @@
 package com.jprada.core.entity;
 
-import com.jprada.core.entity.utils.CollideBox;
-import com.jprada.core.entity.utils.InteractBox;
-import com.jprada.core.graphics.Animation;
-import com.jprada.core.graphics.LineBatch;
-import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteBatch;
-import com.jprada.core.util.Vector2;
-
-import javax.media.opengl.GL;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.media.opengl.GL;
+
+import com.jprada.core.entity.utils.CollideBox;
+import com.jprada.core.entity.utils.InteractBox;
+import com.jprada.core.graphics.Animation;
+import com.jprada.core.graphics.LineBatch;
+import com.jprada.core.graphics.RenderBatch;
+import com.jprada.core.util.Vector2;
 
 /**
  * Created By: Juankprada Date: 10/5/12 Time: 4:43 PM
@@ -119,7 +118,7 @@ public abstract class Actor implements Collidable, Interactable {
 
 	public abstract void onDestroy();
 
-	public abstract void onRender(GL gl, SpriteBatch batch, double interpolation);
+	public abstract void onRender(RenderBatch batch, double interpolation);
 
 	public abstract void onRenderDebug(GL gl, LineBatch batch, double interpolation);
 

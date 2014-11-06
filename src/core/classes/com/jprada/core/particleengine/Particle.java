@@ -2,8 +2,8 @@ package com.jprada.core.particleengine;
 
 import javax.media.opengl.GL;
 
+import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.util.GLColor;
 
 public class Particle {
@@ -56,11 +56,11 @@ public class Particle {
 		
 	}
 	
-	public void draw(GL gl, SpriteBatch batch) {
+	public void draw(RenderBatch batch) {
 		
 		
 		
-		batch.draw(gl, sprite, posX, posY, color, scaleX, scaleY, this.angle);
+		batch.draw(sprite, posX, posY, color, scaleX, scaleY, this.angle);
 		
 
 	}

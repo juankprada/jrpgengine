@@ -10,8 +10,8 @@ import com.jprada.core.entity.Collidable;
 import com.jprada.core.entity.utils.ObjectCollision;
 import com.jprada.core.entity.utils.ObjectInteraction;
 import com.jprada.core.graphics.Animation;
+import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.graphics.SpriteFrame;
 import com.jprada.core.util.algorithm.RadixSort;
 
@@ -169,7 +169,7 @@ public class TileMap {
 		}
 	}
 
-	public void onRender(GL gl, SpriteBatch batch, double interpolation) {
+	public void onRender(GL gl, RenderBatch batch, double interpolation) {
 
 		float renderX, renderY;
 
@@ -196,8 +196,7 @@ public class TileMap {
 							renderY = yPos * tileHeight;
 							renderX = xPos * tileWidth;
 
-							t.onRender(gl, batch, interpolation, renderX,
-									renderY);
+							t.onRender(batch, interpolation, renderX, renderY);
 						}
 					}
 				}
@@ -205,14 +204,14 @@ public class TileMap {
 
 			// Render actors in layer
 			if (l.getActors() != null && !l.getActors().isEmpty()) {
-			List<Actor> actors = RadixSort.sortEntities(l.getActors());
-			for (Actor actor : actors) {
-				actor.onRender(gl, batch, interpolation);
-			}
+				List<Actor> actors = RadixSort.sortEntities(l.getActors());
+				for (Actor actor : actors) {
+					actor.onRender(batch, interpolation);
+				}
 			}
 
 		}
-		batch.end(gl);
+		batch.end();
 
 	}
 

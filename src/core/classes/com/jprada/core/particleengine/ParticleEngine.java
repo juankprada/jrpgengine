@@ -7,8 +7,8 @@ import java.util.Random;
 
 import javax.media.opengl.GL;
 
+import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.util.GLColor;
 
 public class ParticleEngine {
@@ -83,16 +83,16 @@ public class ParticleEngine {
 	}
 	
 	
-	public void draw(GL gl, SpriteBatch batch) {
+	public void draw(GL gl, RenderBatch batch) {
 		
 		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE);
 		batch.begin(gl);
 		
 		for(int i=0; i< particles.size(); i++) {
-			particles.get(i).draw(gl, batch);
+			particles.get(i).draw(batch);
 		}
 		
-		batch.end(gl);
+		batch.end();
 		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE_MINUS_SRC_ALPHA);
 		
 	}

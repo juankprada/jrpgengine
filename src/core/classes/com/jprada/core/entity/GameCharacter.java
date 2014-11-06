@@ -1,12 +1,12 @@
 package com.jprada.core.entity;
 
+import javax.media.opengl.GL;
+
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.LineBatch;
-import com.jprada.core.graphics.SpriteBatch;
+import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.states.WorldMapState;
 import com.jprada.core.util.GLColor;
-
-import javax.media.opengl.GL;
 
 /**
  * Created By: Juankprada Date: 10/5/12 Time: 4:44 PM
@@ -51,7 +51,7 @@ public class GameCharacter extends Entity {
 	}
 	
 	@Override
-	public void onRender(GL gl, SpriteBatch batch, double interpolation) {
+	public void onRender(RenderBatch batch, double interpolation) {
 
 		
 		
@@ -64,7 +64,7 @@ public class GameCharacter extends Entity {
 			drawY += (this.speed.y * interpolation);
 		}
 		
-		batch.draw(gl, this.currentAnimation.getNextFrame(), drawX, drawY);
+		batch.draw(this.currentAnimation.getNextFrame(), drawX, drawY);
 		// batch.draw(texture, 100, 100);
 
 	}

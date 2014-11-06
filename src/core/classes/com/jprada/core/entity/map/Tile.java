@@ -61,8 +61,8 @@ public class Tile {
     }
 
  
-    public void onRender(GL gl, SpriteBatch batch, double interpolation, float posX, float posY) {
-        batch.draw(gl, this.currentAnimation.getNextFrame(), posX, posY);
+    public void onRender(RenderBatch batch, double interpolation, float posX, float posY) {
+        batch.draw(this.currentAnimation.getNextFrame(), posX, posY);
     }
 
 

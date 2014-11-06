@@ -12,13 +12,15 @@ import com.jprada.core.entity.Npc;
 import com.jprada.core.entity.map.TileMap;
 import com.jprada.core.entity.utils.ObjectInteraction;
 import com.jprada.core.graphics.LineBatch;
+import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.particleengine.ParticleEngine;
 import com.jprada.core.states.input.WorldMapKeyListener;
 
 public class WorldMapState extends GameState {
 
-	private SpriteBatch spriteBatch;
+//	private SpriteBatch spriteBatch;
+	private RenderBatch renderBatch;
 	private LineBatch lineBatch;
 
 //	public static List<Actor> worldMapObjects = new ArrayList<Actor>();
@@ -45,8 +47,10 @@ public class WorldMapState extends GameState {
 
 	@Override
 	public void onInit(GL gl) {
-		spriteBatch = new SpriteBatch();
-		spriteBatch.setup(gl);
+//		spriteBatch = new SpriteBatch();
+//		spriteBatch.setup(gl);
+		renderBatch = new RenderBatch(gl);
+		renderBatch.setup(gl);
 
 		lineBatch = new LineBatch();
 		lineBatch.setup(gl);
@@ -129,7 +133,7 @@ public class WorldMapState extends GameState {
 	public void onRender(GL gl, double interpolation) {
 		// TODO Auto-generated method stub
 		
-		currentMap.onRender(gl, spriteBatch, interpolation);
+		currentMap.onRender(gl, renderBatch, interpolation);
 		
 //		int total = particleEngine.getParticles().size() + particleEngine2.getParticles().size() + particleEngine3.getParticles().size();
 		
@@ -146,9 +150,9 @@ public class WorldMapState extends GameState {
 //        }
 //        spriteBatch.end(gl);
 //
-        particleEngine.draw(gl, spriteBatch);
-        particleEngine2.draw(gl, spriteBatch);
-        particleEngine3.draw(gl, spriteBatch);
+        particleEngine.draw(gl, renderBatch);
+        particleEngine2.draw(gl, renderBatch);
+        particleEngine3.draw(gl, renderBatch);
 
 		
 //		this.worldMapObjects = RadixSort.sortEntities(this.worldMapObjects);
