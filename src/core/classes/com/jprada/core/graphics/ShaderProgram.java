@@ -1,9 +1,12 @@
 package com.jprada.core.graphics;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
 import java.nio.FloatBuffer;
 import java.util.Map;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+
+import com.jogamp.opengl.math.Matrix4;
 
 /**
  * Created by Juan Camilo Prada on 25/06/2014.
@@ -175,14 +178,16 @@ public class ShaderProgram {
      * @param transposed whether the matrix should be transposed
      * @param mat the matrix to send
      */
-    public void setUniformMatrix(GL gl, int loc, boolean transposed, Matrix mat) {
+    public void setUniformMatrix(GL gl, int loc, boolean transposed, Matrix4 mat) {
         GL2 gl2 = gl.getGL2();
         if (loc==-1) return;
-        if (fbuf16 == null)
-            fbuf16 = FloatBuffer.allocate(16);
-        fbuf16.clear();
-        mat.store(fbuf16);
-        fbuf16.flip();
+//        if (fbuf16 == null)
+//            fbuf16 = FloatBuffer.allocate(16);
+//        fbuf16.clear();
+//        mat.store(fbuf16);
+//        fbuf16.flip();
+        
+        fbuf16 = FloatBuffer.wrap(mat.getMatrix());
 
         gl2.glUniformMatrix4fv(loc, 1, transposed, fbuf16);
     }

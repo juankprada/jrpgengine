@@ -241,6 +241,7 @@ public class GameWindow implements GLEventListener {
         canvas.addWindowListener(new WindowAdapter() {
             public void windowDestroyNotify(WindowEvent e) {
 //                canvas.destroy();
+            	animator.stop();
                 System.exit(0);
             }
         });
@@ -258,7 +259,11 @@ public class GameWindow implements GLEventListener {
 
     
 
-    // Main Loop of the game
+    public void setCanvas(GLWindow canvas) {
+		this.canvas = canvas;
+	}
+
+	// Main Loop of the game
     @Override
     public void display(GLAutoDrawable drawable) {
 

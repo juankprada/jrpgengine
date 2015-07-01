@@ -436,7 +436,7 @@ public class SpriteBatch {
         indicesBuffer.position(0);
 
         shader.use(gl);
-        shader.setUniformMatrix(gl, matrix_location, false, MVP);
+//        shader.setUniformMatrix(gl, matrix_location, false, MVP);
 
         if(currentTexture != null) {
             gl.glActiveTexture(GL.GL_TEXTURE0);

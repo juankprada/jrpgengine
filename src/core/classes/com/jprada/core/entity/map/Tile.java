@@ -1,28 +1,31 @@
 package com.jprada.core.entity.map;
 
-import com.jogamp.opengl.math.VectorUtil;
-import com.jprada.core.entity.Collidable;
-import com.jprada.core.entity.Interactable;
-import com.jprada.core.entity.Actor;
-import com.jprada.core.graphics.*;
-import com.jprada.core.util.Vector2;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.media.opengl.GL;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.jprada.core.entity.Actor.Direction;
+import com.jprada.core.entity.Collidable;
+import com.jprada.core.entity.Interactable;
+import com.jprada.core.entity.utils.CollideBox;
+import com.jprada.core.entity.utils.InteractBox;
+import com.jprada.core.graphics.Animation;
+import com.jprada.core.graphics.LineBatch;
+import com.jprada.core.graphics.RenderBatch;
 
 /**
  * Created by Juan Camilo Prada on 17/10/2014.
  */
-public class Tile {
+public class Tile implements Collidable, Interactable{
 
 	protected Map<String, Animation> animations = new HashMap<String, Animation>();
 	protected Animation currentAnimation;
 	
 	private Integer id;
+	
+	protected CollideBox collideBox;
+	protected InteractBox interactBox;
 	
     
 
@@ -79,5 +82,40 @@ public class Tile {
     public void onCollision(Collidable other) {
 
     }
+
+
+	@Override
+	public boolean onInteract(Interactable other) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public InteractBox getInteractBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setFacingDirection(Direction direction) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public boolean collides(Collidable other) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public CollideBox getCollideBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

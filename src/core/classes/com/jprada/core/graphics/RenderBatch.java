@@ -2,12 +2,12 @@ package com.jprada.core.graphics;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Arrays;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.math.Matrix4;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jprada.core.GameWindow;
 import com.jprada.core.util.GLColor;
@@ -47,7 +47,7 @@ public class RenderBatch {
 	private static final int INDICES_BUFFER_INDEX = 1;
 	private static final int MAX_BUFFERS = 2;
 	
-	private static final int MAX_VERTEX = 4000;
+	private static final int MAX_VERTEX = 2000;
 	
 	private int[] buffers;
 	
@@ -82,10 +82,10 @@ public class RenderBatch {
 	private ShaderProgram shaderProgram;
 	
 	
-	private Matrix projectionMatrix = new Matrix();
-    private Matrix viewMatrix = new Matrix();
-    private Matrix modelMatrix = new Matrix();
-    private Matrix MVP = new Matrix();
+	private Matrix4 projectionMatrix = new Matrix4();
+    private Matrix4 viewMatrix = new Matrix4();
+    private Matrix4 modelMatrix = new Matrix4();
+    private Matrix4 MVP = new Matrix4();
     
     private int in_position_location;
     private int in_color_location;
@@ -175,24 +175,29 @@ public class RenderBatch {
     
     
     private void setupMatrixes(int w, int h) {
-    	MVP.setIdentity();
+//    	MVP.setIdentity();
     	
     	// Sets the projection matrix to Ortho mode
-        projectionMatrix.setIdentity();
-        projectionMatrix.setToOrtho(0, w, h, 0, 1, -1);
+        projectionMatrix.loadIdentity();
+        projectionMatrix.makeOrtho(0, w, h, 0, 1, -1);
+       
         
         // Sets the view Matrix 
-        viewMatrix.setIdentity();
+        viewMatrix.loadIdentity();
         OrthoCamera camera = OrthoCamera.getInstance();
         viewMatrix.translate(camera.getPosx(), camera.getPosy(), 0);
 
         // Sets the model matrix as the identity
-        modelMatrix.setIdentity();
+        modelMatrix.loadIdentity();
 
-        Matrix PV = new Matrix();
-        PV.setIdentity();
-        Matrix.multiply(projectionMatrix, viewMatrix, PV);
-        Matrix.multiply(PV, modelMatrix, MVP);
+//        Matrix4 PV = new Matrix4();
+//        PV.setIdentity();
+//        Matrix.multiply(projectionMatrix, viewMatrix, PV);
+//        Matrix.multiply(PV, modelMatrix, MVP);
+        
+        projectionMatrix.multMatrix(viewMatrix);
+        projectionMatrix.multMatrix(modelMatrix);
+        MVP = projectionMatrix;
 
     }
     
@@ -488,9 +493,9 @@ public class RenderBatch {
          
          currentTexture = null;
 
-
          drawing = false;
        
+//         System.out.println("RENDER CALLS:"+renderCalls);
          renderCalls = 0;
          
          this.glInstance = null;
