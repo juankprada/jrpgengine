@@ -1,10 +1,8 @@
 package com.jprada.core.entity;
 
-import javax.media.opengl.GL;
 import javax.script.ScriptException;
 
 import com.jprada.core.events.JythonManager;
-import com.jprada.core.graphics.SpriteBatch;
 
 public class Npc extends GameCharacter {
 
@@ -15,7 +13,10 @@ public class Npc extends GameCharacter {
 	public boolean onInteract(Interactable other) {
 		
 		try {
-			JythonManager.jython.put("other", other);
+			JythonManager.jython.put("Me", this);
+			JythonManager.jython.put("Other", other);
+			JythonManager.jython.eval("StopActorMovement(Me)");
+			JythonManager.jython.eval("StopActorMovement(Other)");
 			JythonManager.jython.eval(onInteractScript);
 		} catch (ScriptException e) {
 			// TODO Auto-generated catch block

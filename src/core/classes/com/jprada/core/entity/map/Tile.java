@@ -11,7 +11,6 @@ import com.jprada.core.entity.Interactable;
 import com.jprada.core.entity.utils.CollideBox;
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.Animation;
-import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.RenderBatch;
 
 /**
@@ -69,7 +68,7 @@ public class Tile implements Collidable, Interactable{
     }
 
 
-    public void onRenderDebug(GL gl, LineBatch batch, double interpolation) {
+    public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
 
     }
 
@@ -114,6 +113,13 @@ public class Tile implements Collidable, Interactable{
 
 	@Override
 	public CollideBox getCollideBox() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Direction getFacingDirection() {
 		// TODO Auto-generated method stub
 		return null;
 	}

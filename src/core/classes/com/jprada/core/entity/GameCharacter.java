@@ -3,7 +3,6 @@ package com.jprada.core.entity;
 import javax.media.opengl.GL;
 
 import com.jprada.core.entity.utils.InteractBox;
-import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.states.WorldMapState;
 import com.jprada.core.util.GLColor;
@@ -16,7 +15,7 @@ public class GameCharacter extends Entity {
 	@Override
 	public void onUpdate() {
 		
-		
+		onMove();
 		if (this.speed.x != 0 || this.speed.y != 0) {
 
 			this.collided = false;
@@ -70,9 +69,9 @@ public class GameCharacter extends Entity {
 	}
 	
 	@Override
-	public void onRenderDebug(GL gl, LineBatch batch, double interpolation) {
-		batch.setRenderColor(new GLColor(1.0f, 0.0f, 0.0f));
+	public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
 		
+		GLColor color = new GLColor(1.0f, 0.0f, 0.0f);
 		
 		// Collide Box
 		{
@@ -94,15 +93,15 @@ public class GameCharacter extends Entity {
 				y2 += (this.speed.y * interpolation);
 			}
 			
-			batch.draw(gl, x1, y1, x1, y2);
-			batch.draw(gl, x1, y1, x2, y1);
-			batch.draw(gl, x2, y2, x1, y2);
-			batch.draw(gl, x2, y2, x2, y1);
+			batch.draw(x1, y1, x1, y2, color);
+			batch.draw(x1, y1, x2, y1, color);
+			batch.draw(x2, y2, x1, y2, color);
+			batch.draw(x2, y2, x2, y1, color);
 		}
 		
 		
 		//Interact Box
-		batch.setRenderColor(new GLColor(0, 1.0f, 0));
+		color = new GLColor(0, 1.0f, 0);
 		{
 			float x1 = this.getInteractBox().getX()
 					+ this.getInteractBox().getxOffset();
@@ -122,12 +121,12 @@ public class GameCharacter extends Entity {
 				y2 += (this.speed.y * interpolation);
 			}
 			
-			batch.draw(gl, x1, y1, x1, y2);
-			batch.draw(gl, x1, y1, x2, y1);
-			batch.draw(gl, x2, y2, x1, y2);
-			batch.draw(gl, x2, y2, x2, y1);
+			batch.draw(x1, y1, x1, y2, color);
+			batch.draw(x1, y1, x2, y1, color);
+			batch.draw(x2, y2, x1, y2, color);
+			batch.draw(x2, y2, x2, y1, color);
 		}
-		batch.setRenderColor(new GLColor(1.0f, 1.0f, 1.0f));
+		
 	}
 	
 	
@@ -145,8 +144,11 @@ public class GameCharacter extends Entity {
 
 	@Override
 	public boolean collides(Collidable other) {
-
-		return this.collideBox.collides(other.getCollideBox());
+		if (this.collideBox != null && other.getCollideBox() != null) {
+			return this.collideBox.collides(other.getCollideBox());
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -193,11 +195,12 @@ public class GameCharacter extends Entity {
 		if (intrecated) {
 			System.out.println("I: " + this + ", am interacting with " + other);
 			
+		
 		}
-
+		
 		this.interacting = false;
 		this.wantToInteract = false;
-
+		
 		return false;
 	}
 

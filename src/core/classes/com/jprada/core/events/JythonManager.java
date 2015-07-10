@@ -12,17 +12,17 @@ public class JythonManager {
 		JythonManager.jython = new ScriptEngineManager().getEngineByName("python");
 		
 		try {
+			jython.eval("from random import randint");
+			jython.eval("from com.jprada.core.events.ScriptInterface import StopActorMovement");
+			jython.eval("from com.jprada.core.events.ScriptInterface import SetActorPosition");
 			jython.eval("from com.jprada.core.events.ScriptInterface import SetPlayerPosition");
 			jython.eval("from com.jprada.core.events.ScriptInterface import Wait");
 
 		} catch (ScriptException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
 	}
-	
-	
-	
 	
 }

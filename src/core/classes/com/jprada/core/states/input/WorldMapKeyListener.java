@@ -7,22 +7,16 @@ import com.jprada.core.entity.GameCharacter;
 import com.jprada.core.entity.Actor.Direction;
 import com.jprada.core.states.GameState;
 
-public class WorldMapKeyListener implements KeyListener {
+public class WorldMapKeyListener extends Keyboard {
 
-	private static final int DOWN_KEY = 0;
-	private static final int UP_KEY = 1;
-	private static final int LEFT_KEY = 2;
-	private static final int RIGHT_KEY = 3;
-	
-	private GameCharacter player; 
-	
+		
 
 	public WorldMapKeyListener(GameCharacter player) {
 		super();
 		this.player = player;
 	}
 
-	private boolean[] keyStates = new boolean[4];
+	
 
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -50,6 +44,7 @@ public class WorldMapKeyListener implements KeyListener {
 						}
 					} else if (keyCode == KeyEvent.VK_RIGHT) {
 						this.keyStates[RIGHT_KEY] = false;
+						System.out.println("DOWN KEY STATE:"+keyStates[DOWN_KEY]);
 						if (keyStates[DOWN_KEY]) {
 							player.setMovingDirection(Direction.down);
 						} else if (keyStates[UP_KEY]) {
@@ -94,6 +89,7 @@ public class WorldMapKeyListener implements KeyListener {
 
 			if (keyCode == KeyEvent.VK_SPACE && !player.isWantToInteract()) {
 				player.setWantToInteract(true);
+				flushStates(); // FLush the key states so that no key is hold down by any script
 			}
 
 			if (keyCode == KeyEvent.VK_SHIFT) {
@@ -119,6 +115,7 @@ public class WorldMapKeyListener implements KeyListener {
 					}
 				} else if (keyCode == KeyEvent.VK_DOWN) {
 					this.keyStates[DOWN_KEY] = true;
+					System.out.println("PRessed DOWN");
 					if (player.getMovingDirection() != Direction.down) {
 						player.setMovingDirection(Direction.down);
 					}

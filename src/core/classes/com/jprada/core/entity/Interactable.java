@@ -16,4 +16,6 @@ public interface Interactable {
 	public InteractBox getInteractBox();
 	
 	public void setFacingDirection(Direction direction);
+	
+	public Direction getFacingDirection();
 }

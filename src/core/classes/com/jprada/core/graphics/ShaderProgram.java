@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+
 import com.jogamp.opengl.math.Matrix4;
 
 /**
@@ -18,9 +19,9 @@ public class ShaderProgram {
     public final int fragment;
     protected String log;
 
-    public int in_position_location;
-    public int in_color_location;
-    public int in_text_coord_location;
+//    public int in_position_location;
+//    public int in_color_location;
+//    public int in_text_coord_location;
 
     private static FloatBuffer fbuf16;
 
@@ -40,7 +41,7 @@ public class ShaderProgram {
 
 
         //create the program
-        program = gl.getGL2().glCreateProgram();
+        program = gl.getGL3().glCreateProgram();
 
         //attach the shaders
         gl2.glAttachShader(program, vertex);
@@ -69,16 +70,16 @@ public class ShaderProgram {
            disposeShaders(gl);
         }
 
-       int matrix_location = gl2.glGetUniformLocation(program,
-                "u_projectionViewMatrix");
-       int texture_location = gl2.glGetUniformLocation(program,
-                "texture_diffuse");
-       in_position_location = gl2.glGetAttribLocation(program,
-                "in_Position");
-       in_color_location = gl2.glGetAttribLocation(program, "in_Color");
-       int in_resolution = gl2.glGetAttribLocation(program, "resolution");
-       in_text_coord_location = gl2.glGetAttribLocation(program,
-                "in_TextureCoord");
+//       int matrix_location = gl2.glGetUniformLocation(program, "u_projectionViewMatrix");
+//       int texture_location = gl2.glGetUniformLocation(program, "texture_diffuse");
+       
+//       in_position_location = gl2.glGetAttribLocation(program,"in_Position");
+//       in_color_location = gl2.glGetAttribLocation(program, "in_Color");
+       
+//       int in_resolution = gl2.glGetAttribLocation(program, "resolution");
+       
+//       in_text_coord_location = gl2.glGetAttribLocation(program,
+//                "in_TextureCoord");
 
 
 

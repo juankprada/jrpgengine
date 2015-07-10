@@ -10,7 +10,6 @@ import javax.media.opengl.GL;
 import com.jprada.core.entity.Actor;
 import com.jprada.core.entity.Collidable;
 import com.jprada.core.entity.Interactable;
-import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.Sprite;
 import com.jprada.core.util.GLColor;
@@ -141,12 +140,18 @@ public class ParticleEmitter extends Actor {
 
 	@Override
 	public void onRender(RenderBatch batch, double interpolation) {
-		// TODO Auto-generated method stub
+		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE);
 		
+		for(int i=0; i< particles.size(); i++) {
+			particles.get(i).draw(batch);
+		}
+		
+		
+		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE_MINUS_SRC_ALPHA);
 	}
 
 	@Override
-	public void onRenderDebug(GL gl, LineBatch batch, double interpolation) {
+	public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -154,7 +159,7 @@ public class ParticleEmitter extends Actor {
 	@Override
 	public void onUpdate() {
 		// TODO Auto-generated method stub
-		
+		this.update();
 	}
 	
 	

@@ -10,7 +10,6 @@ import javax.media.opengl.GL;
 import com.jprada.core.entity.utils.CollideBox;
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.Animation;
-import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.util.Vector2;
 
@@ -20,8 +19,36 @@ import com.jprada.core.util.Vector2;
 public abstract class Actor implements Collidable, Interactable {
 
 	public enum Direction {
-		down, downLeft, downRight, left, right, up, upLeft, upRight
+		down(1),
+		up(-1),
+		left(-2), 
+		right(2),
+		downLeft(3), 
+		upRight(-3),
+		downRight(4), 
+		upLeft(-4);
+		
+		
+		private final int val;
+		
+		Direction(int val) {
+			this.val = val;
+		}
+		
+		public int val() { return val; }
+		
+		public boolean isOpposed(Direction other) {
+			if(other.val()+val == 0) {
+				return true;
+			} else {
+				return false;
+			}
+			
+		}
+		
 	}
+	
+
 
 	public static List<Actor> ENTITY_LIST = new ArrayList<Actor>();
 
@@ -120,7 +147,7 @@ public abstract class Actor implements Collidable, Interactable {
 
 	public abstract void onRender(RenderBatch batch, double interpolation);
 
-	public abstract void onRenderDebug(GL gl, LineBatch batch, double interpolation);
+	public abstract void onRenderDebug(GL gl, RenderBatch batch, double interpolation);
 
 	public abstract void onUpdate();
 

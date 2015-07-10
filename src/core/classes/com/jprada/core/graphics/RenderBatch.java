@@ -43,6 +43,26 @@ public class RenderBatch {
 			+ "  gl_FragColor = pass_Color * texture2D(texture_diffuse, pass_TextureCoord);" 
 			+ "}";
 			
+	private final String LineVertexShaderCode =
+			// This matrix member variable provides a hook to manipulate
+			// the coordinates of the objects that use this vertex shader
+			"#version 110\n" +
+			"uniform mat4 u_projectionViewMatrix;" +
+			"attribute vec4 in_Position;" + 
+			"attribute vec4 in_Color;"	+ 
+			"varying vec4 pass_Color;" + 
+			"void main() {" +
+			"  gl_Position = u_projectionViewMatrix * in_Position;"	+ 
+			"  pass_Color = in_Color;" + 
+			"}";
+
+	private final String LineFragmentShaderCode = 
+					"#version 110\n" +
+					"varying vec4 pass_Color;" + 
+					"void main() {" + 
+					"  gl_FragColor = pass_Color;" + 
+					"}";
+			
 	private static final int VERTEX_BUFFER_INDEX = 0;
 	private static final int INDICES_BUFFER_INDEX = 1;
 	private static final int MAX_BUFFERS = 2;
@@ -106,6 +126,8 @@ public class RenderBatch {
     private Integer sfactor;
     private Integer dfactor;
     
+    private RenderMode mode;
+    
     public RenderBatch(GL gl) {
     	buffers = new int[MAX_BUFFERS];
     	
@@ -121,15 +143,36 @@ public class RenderBatch {
     	this.setup(gl, shaderProgram, RenderMode.TEXTURE);
     }
     
+    public void setup(GL gl, RenderMode mode) {
+    	ShaderProgram shp = null;
+    	switch(mode) {
+			case DOT:
+				break;
+			case LINE:
+				shp = new ShaderProgram(gl, LineVertexShaderCode, LineFragmentShaderCode);
+				break;
+			case TEXTURE:
+				shp = new ShaderProgram(gl, VertexShaderCode, FragmentShaderCode);
+				break;
+			default:
+				break;
+    	
+    	}
+    	this.setup(gl, shp, mode);
+    	   
+    }
+    
     public void setup(GL gl, ShaderProgram shaderProgram, RenderMode mode) {
     	this.shaderProgram = shaderProgram;
     	this.vertexCount = 0;
+    	this.mode = mode;
     	
     	switch(mode) {
     	case TEXTURE:
     		setupTextureRender();
     		break;
     	case LINE:
+    		setupLineRender();
     		break;
     	case DOT:
     		break;
@@ -137,6 +180,13 @@ public class RenderBatch {
     		break;
     	}
     	
+    	
+    	 this.vertices = new float[MAX_VERTEX * elementsInVertex];
+         this.indicesCount = 0;
+         this.vertexCount = 0;
+         this.vertexElementsCount = 0;
+         
+               
     	in_position_location = this.shaderProgram.getAttributeLocation(gl, "in_Position");
         in_color_location = this.shaderProgram.getAttributeLocation(gl, "in_Color");
         in_text_coord_location = this.shaderProgram.getAttributeLocation(gl, "in_TextureCoord");
@@ -147,6 +197,29 @@ public class RenderBatch {
     	setupMatrixes(GameWindow.getWindowWidth(), GameWindow.getWindowHeight());
     }
 	
+    private void setupLineRender() {
+    	this.vertexInFigure = 2;
+    	this.elementsInVertex=6;
+    	this.elementsInVertexArray = this.elementsInVertex * this.vertexInFigure;
+    	this.indicesNumber = 2;
+    	this.vboStride = 24;
+    	
+    	this.vertices = new float[MAX_VERTEX * elementsInVertex];
+    	
+    	int maxFigures = MAX_VERTEX / vertexInFigure;
+    	int indicesLength = 2*maxFigures;
+    	
+    	this.indices = new int[indicesLength];
+    	
+    	int j = 0;
+    	for (int i = 0; i < indicesLength; i += 4, j += 4) {
+			indices[i] = j;
+			indices[i + 1] = (j + 1);
+			indices[i + 2] = (j + 2);
+			indices[i + 3] = (j + 3);
+		}
+    }
+    
     private void setupTextureRender() {
     	
     	this.vertexInFigure = 4;
@@ -223,6 +296,49 @@ public class RenderBatch {
         this.drawing = true;
     }
     
+    public void draw(float x1, float y1, float x2, float y2, GLColor color) {
+		if (!drawing)
+			throw new IllegalStateException(
+					"SpriteBatch.begin() must be called before draw ");
+
+		// Texture texture = region.getTexture();
+		if ((vertexCount) == (MAX_VERTEX-1 ) ) {
+
+			render();
+		}
+
+	
+
+		int i = vertexElementsCount;
+
+		/* vertex 1 */
+		vertices[i++] = x1;
+		vertices[i++] = y1;
+		vertices[i++] = color.getR();
+		vertices[i++] = color.getG();
+		vertices[i++] = color.getB();
+		vertices[i++] = color.getA();
+		// vertices[i++] = region.getU();
+		// vertices[i++] = region.getV2();
+
+		/* vertex 2 */
+		vertices[i++] = x2;
+		vertices[i++] = y2;
+		vertices[i++] = color.getR();
+		vertices[i++] = color.getG();
+		vertices[i++] = color.getB();
+		vertices[i++] = color.getA();
+		
+
+		vertexElementsCount += this.elementsInVertexArray;
+        vertexCount += this.vertexInFigure;
+        indicesCount += 2;
+        
+//		numOfVertices += VERTEX_ARRAY_ELEMENTS;
+//		numOfIndices += INDICES_PER_QUAD;
+//		numOfSpritesInBatch++;
+	}
+    
     public void draw(SpriteFrame region, float posx, float posy) {
     	this.draw(region, posx, posy, null);
     }
@@ -251,10 +367,10 @@ public class RenderBatch {
                     "SpriteBatch.begin() must be called before draw ");
 
         Texture texture = region.getTexture();
-
+        
         if (texture != currentTexture) {
             switchTexture(texture);
-        } else if ((vertexCount) == (MAX_VERTEX-1 ) ) {
+        } else if ((vertexCount) == (MAX_VERTEX-4 ) ) {
             render();
         }
         
@@ -412,14 +528,7 @@ public class RenderBatch {
     	
     	GL gl = this.glInstance;
     	
-		gl.getGL2().glDisable(GL2.GL_DEPTH_BUFFER_BIT);
-		gl.getGL2().glEnable(GL2.GL_TEXTURE_2D);
-		gl.getGL2().glEnable(GL2.GL_BLEND);
 		
-		if(this.sfactor == null || this.dfactor == null)
-        	gl.getGL2().glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-        else
-        	gl.getGL2().glBlendFunc(this.sfactor, this.dfactor);
         	
     	
     	    	
@@ -429,7 +538,17 @@ public class RenderBatch {
     	shaderProgram.use(gl);
     	shaderProgram.setUniformMatrix(gl, matrix_location, false, MVP);
     	
-    	if (currentTexture != null) {
+    	
+    	if (this.mode == RenderMode.TEXTURE && currentTexture != null) {
+    		gl.getGL2().glDisable(GL2.GL_DEPTH_BUFFER_BIT);
+    		gl.getGL2().glEnable(GL2.GL_TEXTURE_2D);
+    		gl.getGL2().glEnable(GL2.GL_BLEND);
+    		
+    		if(this.sfactor == null || this.dfactor == null)
+            	gl.getGL2().glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+            else
+            	gl.getGL2().glBlendFunc(this.sfactor, this.dfactor);
+    		
             currentTexture.bind(gl);
             gl.glActiveTexture(GL.GL_TEXTURE0);
         }
@@ -451,12 +570,24 @@ public class RenderBatch {
         gl.getGL2().glVertexAttribPointer(in_color_location, 4, GL2.GL_FLOAT, false, this.vboStride, 8);
         gl.getGL2().glEnableVertexAttribArray(in_color_location);
 
-        gl.getGL2().glVertexAttribPointer(in_text_coord_location, 2, GL2.GL_FLOAT, false, this.vboStride, 24);
-        gl.getGL2().glEnableVertexAttribArray(in_text_coord_location);
+       
 
-
-        gl.getGL2().glDrawElements(GL2.GL_TRIANGLES, this.indicesCount, GL2.GL_UNSIGNED_INT, 0L);
-
+        switch(this.mode) {
+		case DOT:
+			break;
+		case LINE:
+			gl.getGL2().glDrawElements(GL2.GL_LINES, this.indicesCount, GL2.GL_UNSIGNED_INT, 0L);
+			break;
+		case TEXTURE:
+			gl.getGL2().glVertexAttribPointer(in_text_coord_location, 2, GL2.GL_FLOAT, false, this.vboStride, 24);
+		    gl.getGL2().glEnableVertexAttribArray(in_text_coord_location);
+			gl.getGL2().glDrawElements(GL2.GL_TRIANGLES, this.indicesCount, GL2.GL_UNSIGNED_INT, 0L);
+			break;
+		default:
+			break;
+        
+        }
+        
         this.vertices = new float[MAX_VERTEX * elementsInVertex];
         this.indicesCount = 0;
         this.vertexCount = 0;
@@ -503,8 +634,11 @@ public class RenderBatch {
 
     
     public void setBlendFunc(int sfactor, int dfactor) {
+    	render();
     	this.sfactor = sfactor;
     	this.dfactor = dfactor;
+    	
+    	 
     }
 }
 

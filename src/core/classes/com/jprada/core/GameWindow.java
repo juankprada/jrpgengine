@@ -1,7 +1,24 @@
 package com.jprada.core;
 
 
-import com.jogamp.newt.*;
+import java.awt.Font;
+import java.awt.Frame;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
+
+import com.jogamp.newt.Display;
+import com.jogamp.newt.MonitorDevice;
+import com.jogamp.newt.MonitorMode;
+import com.jogamp.newt.NewtFactory;
+import com.jogamp.newt.Screen;
 import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
@@ -17,10 +34,14 @@ import com.jprada.core.events.JythonManager;
 import com.jprada.core.states.GameState;
 import com.jprada.core.states.WorldMapState;
 
-import javax.media.opengl.*;
-import java.awt.*;
-import java.util.List;
-import java.util.Random;
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.nulldevice.NullSoundDevice;
+import de.lessvoid.nifty.render.batch.BatchRenderDevice;
+import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
+import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
+import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendFactory;
+import de.lessvoid.nifty.spi.render.RenderDevice;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 
 
@@ -55,7 +76,7 @@ public class GameWindow implements GLEventListener {
     private JythonManager scriptManager;
 //    private Frame frame;
 
-
+    public static Nifty nifty;
     private static final int MAX_FRAMESKIP = 5;
 
     private static double nextGameTick;
@@ -330,22 +351,48 @@ public class GameWindow implements GLEventListener {
     public void init(GLAutoDrawable drawable) {
         GL gl = drawable.getGL();
 
-        gl.glDisable(GL.GL_DEPTH_TEST);
+//        gl.glDisable(GL.GL_DEPTH_TEST);
+//
+//        // Disable VSync
+//        gl.setSwapInterval(0);
+//
+//        gl.glClearColor(clearColor_r, clearColor_g, clearColor_b, clearColor_a);
 
-        // Disable VSync
-        gl.setSwapInterval(0);
+     
+       
+       
+       
+       
+       
+   	
+	
+	JoglInputSystem inputsystem = new JoglInputSystem(GameWindow.getGameWindow().getCanvas());
+	GameWindow.getGameWindow().getCanvas().addMouseListener(inputsystem);
 
-        gl.glClearColor(clearColor_r, clearColor_g, clearColor_b, clearColor_a);
+	BatchRenderBackend backend = JoglBatchRenderBackendFactory.create();
 
-       currentGameState = new WorldMapState();
-       currentGameState.onInit(gl);
-       
-       canvas.addKeyListener(currentGameState.getKeyListener());
-       
-       eventManager = EventManager.getEventManager();
-       scriptManager.initJythonInterpreter();
-       
-       
+	RenderDevice renderDevice = new BatchRenderDevice(backend);
+	GameWindow.nifty = new Nifty(renderDevice, new NullSoundDevice(), inputsystem, new AccurateTimeProvider());
+	Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE);
+	Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE);
+	nifty.loadStyleFile("nifty-default-styles.xml");
+	nifty.loadControlFile("nifty-default-controls.xml");
+
+	gl.glDisable(GL.GL_DEPTH_TEST);
+
+	// Disable VSync
+	gl.setSwapInterval(0);
+
+	gl.glClearColor(clearColor_r, clearColor_g, clearColor_b, clearColor_a);
+
+	  currentGameState = new WorldMapState();
+      currentGameState.onInit(gl);
+      
+      canvas.addKeyListener(currentGameState.getKeyListener());
+      
+      eventManager = EventManager.getEventManager();
+      scriptManager.initJythonInterpreter();
+
       
        
     }

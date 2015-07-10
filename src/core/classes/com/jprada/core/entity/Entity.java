@@ -1,25 +1,5 @@
 package com.jprada.core.entity;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.media.opengl.GL;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
-import com.jprada.core.entity.utils.ObjectCollision;
-import com.jprada.core.graphics.Animation;
-import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteBatch;
-import com.jprada.core.graphics.SpriteFrame;
-import com.jprada.core.states.WorldMapState;
-import com.jprada.core.util.ResourceManager;
-
 public abstract class Entity extends Actor {
 
 	protected int moveSpeed = 5;
@@ -139,7 +119,7 @@ public abstract class Entity extends Actor {
 	public void setMovingDirection(Direction movingDirection) {
 		// TODO Auto-generated method stub
 		super.setMovingDirection(movingDirection);
-		onMove();
+		
 	}
 
 	@Override

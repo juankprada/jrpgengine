@@ -5,11 +5,11 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 
-import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
+import com.jprada.core.entity.Actor;
 import com.jprada.core.entity.Entity;
 import com.jprada.core.entity.GameCharacter;
-import com.jprada.core.entity.Actor;
+import com.jprada.core.states.input.Keyboard;
 
 /**
  * Created by Juan Camilo Prada on 25/06/2014.
@@ -32,7 +32,7 @@ public abstract class GameState {
     public abstract void onRender(GL gl, double interpolation);
     public abstract void onFinish(GL gl);
     
-    public abstract KeyListener getKeyListener();
+    public abstract Keyboard getKeyListener();
     public abstract MouseListener getMouseListener();
     
     // util methods for scripting engine

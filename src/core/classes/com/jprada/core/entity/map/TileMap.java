@@ -58,51 +58,7 @@ public class TileMap {
 		tileSet.add(t2.getId(), t2);
 
 		Layer l = new Layer(widthInTiles, heightInTiles);
-		l.addTile(t1.getId(), 0, 0);
-		l.addTile(t1.getId(), 1, 0);
-		l.addTile(t1.getId(), 2, 0);
-		l.addTile(t1.getId(), 3, 0);
-		l.addTile(t1.getId(), 4, 0);
-		l.addTile(t1.getId(), 5, 0);
-		l.addTile(t1.getId(), 6, 0);
-		l.addTile(t1.getId(), 7, 0);
-		l.addTile(t1.getId(), 8, 0);
-		l.addTile(t1.getId(), 0, 1);
-		l.addTile(t1.getId(), 1, 1);
-		l.addTile(t1.getId(), 2, 1);
-		l.addTile(t1.getId(), 3, 1);
-		l.addTile(t1.getId(), 4, 1);
-		l.addTile(t1.getId(), 5, 1);
-		l.addTile(t1.getId(), 6, 1);
-		l.addTile(t1.getId(), 7, 1);
-		l.addTile(t1.getId(), 8, 1);
-		l.addTile(t1.getId(), 0, 2);
-		l.addTile(t1.getId(), 1, 2);
-		l.addTile(t1.getId(), 2, 2);
-		l.addTile(t1.getId(), 3, 2);
-		l.addTile(t1.getId(), 4, 2);
-		l.addTile(t1.getId(), 5, 2);
-		l.addTile(t1.getId(), 6, 2);
-		l.addTile(t1.getId(), 7, 2);
-		l.addTile(t1.getId(), 8, 2);
-		l.addTile(t1.getId(), 0, 3);
-		l.addTile(t1.getId(), 1, 3);
-		l.addTile(t1.getId(), 2, 3);
-		l.addTile(t1.getId(), 3, 3);
-		l.addTile(t1.getId(), 4, 3);
-		l.addTile(t1.getId(), 5, 3);
-		l.addTile(t1.getId(), 6, 3);
-		l.addTile(t1.getId(), 7, 3);
-		l.addTile(t1.getId(), 8, 3);
-		l.addTile(t1.getId(), 0, 4);
-		l.addTile(t1.getId(), 1, 4);
-		l.addTile(t1.getId(), 2, 4);
-		l.addTile(t1.getId(), 3, 4);
-		l.addTile(t1.getId(), 4, 4);
-		l.addTile(t1.getId(), 5, 4);
-		l.addTile(t1.getId(), 6, 4);
-		l.addTile(t1.getId(), 7, 4);
-		l.addTile(t1.getId(), 8, 4);
+		
 
 		Layer l2 = new Layer(widthInTiles, heightInTiles);
 		for (int y = 0; y < heightInTiles; y++) {
@@ -120,12 +76,13 @@ public class TileMap {
 			}
 		}
 
+		this.layers.add(l3);
 		this.layers.add(l2);
-		// this.layers.add(l3);
-		// this.layers.add(l2);
-		// this.layers.add(l2);
-		// this.layers.add(l2);
-		// this.layers.add(l2);
+//		this.layers.add(l3);
+//		this.layers.add(l2);
+//		this.layers.add(l2);
+//		this.layers.add(l2);
+//		this.layers.add(l2);
 
 	}
 
@@ -150,16 +107,18 @@ public class TileMap {
 			if (l.getActors() != null && !l.getActors().isEmpty()) {
 				for (Actor actorOne : l.getActors()) {
 					for (Actor actorTwo : l.getActors()) {
+						if (actorTwo == null) { continue; }
+						
 						if (actorOne.equals(actorTwo)) {
 							continue;
 						}
 
-						if (actorOne.isWantToInteract()
-								&& actorTwo.getInteractBox().collides(
-										actorOne.getCollideBox())) {
-							ObjectInteraction.ObjectInteractionList
-									.add(new ObjectInteraction(actorOne,
-											actorTwo));
+						if (actorOne.isWantToInteract() && actorTwo.getInteractBox() != null && actorOne.getCollideBox() != null && actorTwo.getInteractBox().collides(actorOne.getCollideBox())) {
+							
+								ObjectInteraction.ObjectInteractionList
+										.add(new ObjectInteraction(actorOne,
+												actorTwo));
+							
 						}
 					}
 
@@ -169,6 +128,25 @@ public class TileMap {
 		}
 	}
 
+	public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
+		
+		batch.begin(gl);
+		
+		for (Layer l : layers) {
+
+			// Render actors in layer
+			if (l.getActors() != null && !l.getActors().isEmpty()) {
+				List<Actor> actors = RadixSort.sortEntities(l.getActors());
+				for (Actor actor : actors) {
+					actor.onRenderDebug(gl, batch, interpolation);
+				}
+			}
+
+		}
+		
+		batch.end();
+	}
+	
 	public void onRender(GL gl, RenderBatch batch, double interpolation) {
 
 		float renderX, renderY;
