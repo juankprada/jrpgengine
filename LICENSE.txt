@@ -19,3 +19,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+The male_spritesheet.png and sandwater.png are part of the Liberated Pixel Cup 
+assets. All Liberated Pixel Cup art submissions are dual licensed under the 
+CC-BY-SA 3.0 license and the GNU GPL 3.0, and are copyright their respective 
+authors.
