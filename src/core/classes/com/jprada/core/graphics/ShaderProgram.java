@@ -41,7 +41,7 @@ public class ShaderProgram {
 
 
         //create the program
-        program = gl.getGL3().glCreateProgram();
+        program = gl.getGL2().glCreateProgram();
 
         //attach the shaders
         gl2.glAttachShader(program, vertex);
