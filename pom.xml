@@ -42,6 +42,18 @@
 
 		<dependency>
 			<groupId>lessvoid</groupId>
+			<artifactId>nifty-default-controls</artifactId>
+			<version>1.4.2-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>lessvoid</groupId>
+			<artifactId>nifty-style-black</artifactId>
+			<version>1.4.2-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>lessvoid</groupId>
 			<artifactId>nifty-jogl-renderer</artifactId>
 			<version>1.4.2-SNAPSHOT</version>
 		</dependency>

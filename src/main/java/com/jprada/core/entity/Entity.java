@@ -128,19 +128,5 @@ public abstract class Entity extends Actor {
 		fixStandingDireciton();
 	}
 
-//	protected boolean posValid() {
-//		boolean posValid = true;
-////		// for (MapObject mo : WorldMapState.worldMapObjects) {
-////		for (Actor mo2 : WorldMapState.worldMapObjects) {
-////
-////			if (!this.equals(mo2) && this.collides(mo2)) {
-////				ObjectCollision.ObjectCollisionList.add(new ObjectCollision(
-////						this, mo2));
-////				posValid = false;
-////			}
-////		}
-////		// }
-//
-//		return posValid;
-//	}
+
 }

@@ -40,11 +40,14 @@ public class TileMap {
 		t1.setId(0);
 		Tile t2 = new Tile();
 		t2.setId(1);
+
 		Sprite sp = new Sprite("sandwater.png");
 		SpriteFrame frame = new SpriteFrame(sp.getTexture(), 0, 0, 32, 32);
+
 		List<SpriteFrame> frames = new ArrayList<SpriteFrame>();
 		frames.add(frame);
 		Animation anim = new Animation(frames, Animation.ANIMATION_LOOPING);
+
 		t1.currentAnimation = anim;
 
 		frame = new SpriteFrame(sp.getTexture(), 32, 0, 32, 32);
@@ -56,32 +59,22 @@ public class TileMap {
 		tileSet.add(t1.getId(), t1);
 		tileSet.add(t2.getId(), t2);
 
-		Layer l = new Layer(widthInTiles, heightInTiles);
+
 		
 
-		Layer l2 = new Layer(widthInTiles, heightInTiles);
+		Layer l = new Layer(widthInTiles, heightInTiles);
 		for (int y = 0; y < heightInTiles; y++) {
 			for (int x = 0; x < widthInTiles; x++) {
 
-				l2.addTile(t1.getId(), x, y);
+				l.addTile(t1.getId(), x, y);
 			}
 		}
 
-		Layer l3 = new Layer(widthInTiles, heightInTiles);
-		for (int y = 0; y < heightInTiles; y++) {
-			for (int x = 0; x < widthInTiles; x++) {
 
-				l3.addTile(t1.getId(), x, y);
-			}
-		}
 
-		this.layers.add(l3);
-		this.layers.add(l2);
-//		this.layers.add(l3);
-//		this.layers.add(l2);
-//		this.layers.add(l2);
-//		this.layers.add(l2);
-//		this.layers.add(l2);
+		this.layers.add(l);
+
+
 
 	}
 

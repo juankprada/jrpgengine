@@ -22,6 +22,8 @@ import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.ButtonClickedEvent;
+import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
@@ -44,7 +46,7 @@ public class WorldMapState extends GameState {
 
 	public static TileMap currentMap;
 
-	
+
 	private Screen  scr;
 
 	@Override
@@ -59,8 +61,7 @@ public class WorldMapState extends GameState {
 
 	@Override
 	public void onInit(GL gl) {
-		// spriteBatch = new SpriteBatch();
-		// spriteBatch.setup(gl);
+
 		renderBatch = new RenderBatch(gl);
 		renderBatch.setup(gl);
 
@@ -78,10 +79,6 @@ public class WorldMapState extends GameState {
 		p3.setPosY(220);
 		p3.setOnInteractScript("Wait(2000)\nSetPlayerPosition(300, 300)\nSetActorPosition(Me, 400, 500)");
 
-		// this.worldMapObjects.add(PLAYER);
-		// this.worldMapObjects.add(p2);
-		// this.worldMapObjects.add(p3);
-
 		this.keyListener = new WorldMapKeyListener(PLAYER);
 
 		particleEngine = new ParticleEmitter(null, 200, 200);
@@ -92,23 +89,23 @@ public class WorldMapState extends GameState {
 
 		currentMap = new TileMap();
 		if (currentMap.getLayers() != null && !currentMap.getLayers().isEmpty()) {
-			particleEngine.setCurrentLayer(1);
+			particleEngine.setCurrentLayer(0);
 			
-			currentMap.getLayers().get(1).addActor(particleEngine);
-			PLAYER.setCurrentLayer(1);
-			currentMap.getLayers().get(1).addActor(PLAYER);
+			currentMap.getLayers().get(0).addActor(particleEngine);
+			PLAYER.setCurrentLayer(0);
+			currentMap.getLayers().get(0).addActor(PLAYER);
 			
-			p2.setCurrentLayer(1);
-			currentMap.getLayers().get(1).addActor(p2);
-			p3.setCurrentLayer(1);
-			currentMap.getLayers().get(1).addActor(p3);
+			p2.setCurrentLayer(0);
+			currentMap.getLayers().get(0).addActor(p2);
+			p3.setCurrentLayer(0);
+			currentMap.getLayers().get(0).addActor(p3);
 		}
 
-	
-		
+
+
 		
 		scr = createIntroScreen(GameWindow.nifty, new MyScreenController());
-		
+
 		GameWindow.nifty.gotoScreen("start");
 	}
 
@@ -116,10 +113,10 @@ public class WorldMapState extends GameState {
 
 	public static class MyScreenController extends DefaultScreenController {
 		public String screenID;
-		
-				
+
+
 		@NiftyEventSubscriber(id = "exit")
-		public void exit(final String id, final Object event) {
+		public void exit(final String id, final ButtonClickedEvent event) {
 			nifty.removeScreen(this.screenID);
 		}
 	}
@@ -140,7 +137,7 @@ public class WorldMapState extends GameState {
 								effectParameter("mode", "in");
 							}
 						});
-						
+
 						onEndScreenEffect(new EffectBuilder("move") {
 							{
 								length(500);
@@ -150,12 +147,7 @@ public class WorldMapState extends GameState {
 								effectParameter("mode", "out");
 							}
 						});
-//						onActiveEffect(new EffectBuilder("gradient") {
-//							{
-//								effectValue("offset", "0%", "color", "#333f");
-//								effectValue("offset", "100%", "color", "#ffff");
-//							}
-//						});
+
 						panel(new PanelBuilder() {
 							{
 								childLayoutVertical();
@@ -168,12 +160,8 @@ public class WorldMapState extends GameState {
 										valignCenter();
 									}
 								});
-//								panel(new PanelBuilder() {
-//									{
-//										height(SizeValue.px(10));
-//									}
-//								});
-								control(new ControlBuilder("exit", "Click here to exit!") {
+
+								control(new ButtonBuilder("exit", "Click here to exit!") {
 									{
 										alignCenter();
 										valignCenter();
@@ -185,9 +173,9 @@ public class WorldMapState extends GameState {
 				});
 			}
 		}.build(nifty);
-		
+
 		controller.screenID = scr.getScreenId();
-		
+
 		return scr;
 	}
 
@@ -221,7 +209,7 @@ public class WorldMapState extends GameState {
 
 			GameWindow.nifty.render(false);
 
-		
+
 
 	}
 
