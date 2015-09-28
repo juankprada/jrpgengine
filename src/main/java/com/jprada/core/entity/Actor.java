@@ -10,6 +10,7 @@ import com.jprada.core.entity.utils.CollideBox;
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.Animation;
 import com.jprada.core.graphics.RenderBatch;
+import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.util.Vector2;
 
 /**
@@ -144,7 +145,7 @@ public abstract class Actor implements Collidable, Interactable {
 
 	public abstract void onDestroy();
 
-	public abstract void onRender(RenderBatch batch, double interpolation);
+	public abstract void onRender(SpriteBatch batch, double interpolation);
 
 	public abstract void onRenderDebug(GL gl, RenderBatch batch, double interpolation);
 

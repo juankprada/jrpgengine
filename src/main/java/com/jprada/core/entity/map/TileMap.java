@@ -8,10 +8,7 @@ import com.jprada.core.entity.Actor;
 import com.jprada.core.entity.Collidable;
 import com.jprada.core.entity.utils.ObjectCollision;
 import com.jprada.core.entity.utils.ObjectInteraction;
-import com.jprada.core.graphics.Animation;
-import com.jprada.core.graphics.RenderBatch;
-import com.jprada.core.graphics.Sprite;
-import com.jprada.core.graphics.SpriteFrame;
+import com.jprada.core.graphics.*;
 import com.jprada.core.util.algorithm.RadixSort;
 
 public class TileMap {
@@ -139,7 +136,7 @@ public class TileMap {
 		batch.end();
 	}
 	
-	public void onRender(GL gl, RenderBatch batch, double interpolation) {
+	public void onRender(GL gl, SpriteBatch batch, double interpolation) {
 
 		float renderX, renderY;
 

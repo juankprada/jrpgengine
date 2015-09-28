@@ -11,6 +11,7 @@ import com.jprada.core.entity.Collidable;
 import com.jprada.core.entity.Interactable;
 import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.Sprite;
+import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.util.GLColor;
 
 public class ParticleEmitter extends Actor {
@@ -82,7 +83,7 @@ public class ParticleEmitter extends Actor {
 	}
 	
 	
-	public void draw(GL gl, RenderBatch batch) {
+	public void draw(GL gl, SpriteBatch batch) {
 		
 		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE);
 		batch.begin(gl);
@@ -138,7 +139,7 @@ public class ParticleEmitter extends Actor {
 	}
 
 	@Override
-	public void onRender(RenderBatch batch, double interpolation) {
+	public void onRender(SpriteBatch batch, double interpolation) {
 		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE);
 		
 		for(int i=0; i< particles.size(); i++) {

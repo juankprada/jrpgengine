@@ -2,21 +2,24 @@ package com.jprada.core.states;
 
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 import com.jprada.core.GameWindow;
 import com.jprada.core.entity.CharacterXMLImporter;
 import com.jprada.core.entity.GameCharacter;
 import com.jprada.core.entity.Npc;
 import com.jprada.core.entity.map.TileMap;
 import com.jprada.core.entity.utils.ObjectInteraction;
+import com.jprada.core.graphics.LineBatch;
 import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.RenderBatch.RenderMode;
+import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.particleengine.ParticleEmitter;
 import com.jprada.core.states.input.Keyboard;
 import com.jprada.core.states.input.WorldMapKeyListener;
 
+import com.jprada.core.util.GLColor;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -31,7 +34,7 @@ import de.lessvoid.nifty.tools.Color;
 public class WorldMapState extends GameState {
 
 	// private SpriteBatch spriteBatch;
-	private RenderBatch renderBatch;
+	private SpriteBatch spriteBatch;
 	
 
 	// public static List<Actor> worldMapObjects = new ArrayList<Actor>();
@@ -45,6 +48,8 @@ public class WorldMapState extends GameState {
 	// Tile[][] tileArray = new Tile[25][19];
 
 	public static TileMap currentMap;
+
+
 
 
 	private Screen  scr;
@@ -62,8 +67,8 @@ public class WorldMapState extends GameState {
 	@Override
 	public void onInit(GL gl) {
 
-		renderBatch = new RenderBatch(gl);
-		renderBatch.setup(gl);
+		spriteBatch = new SpriteBatch(gl);
+		spriteBatch.setup(gl);
 
 		
 
@@ -105,6 +110,8 @@ public class WorldMapState extends GameState {
 
 		
 		scr = createIntroScreen(GameWindow.nifty, new MyScreenController());
+
+
 
 		GameWindow.nifty.gotoScreen("start");
 	}
@@ -197,19 +204,24 @@ public class WorldMapState extends GameState {
 	public void onRender(GL gl, double interpolation) {
 		// TODO Auto-generated method stub
 		
-		currentMap.onRender(gl, renderBatch, interpolation);
+		currentMap.onRender(gl, spriteBatch, interpolation);
 
 
 		// DEBUG INFO
-		if (GameWindow.ENABLE_DEBUG_INFO) {		
-			renderBatch.setup(gl, RenderMode.LINE);
-			currentMap.onRenderDebug(gl, renderBatch, interpolation);
-			renderBatch.setup(gl, RenderMode.TEXTURE);	
-		}
-
-			GameWindow.nifty.render(false);
+//		if (GameWindow.ENABLE_DEBUG_INFO) {
+//			spriteBatch.setup(gl, RenderMode.LINE);
+//			currentMap.onRenderDebug(gl, spriteBatch, interpolation);
+//			spriteBatch.setup(gl, RenderMode.TEXTURE);
+//		}
 
 
+
+
+
+
+
+
+		GameWindow.nifty.render(false);
 
 	}
 

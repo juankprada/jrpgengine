@@ -37,6 +37,7 @@ import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
+import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendCoreProfileFactory;
 import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendFactory;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
@@ -190,8 +191,6 @@ public class GameWindow implements GLEventListener {
             MonitorDevice monitor = canvas.getMainMonitor();
             MonitorMode mmCurrent = monitor.queryCurrentMode();
             MonitorMode mmOrig = monitor.getOriginalMode();
-            System.err.println("[0] orig   : " + mmOrig);
-            System.err.println("[0] current: " + mmCurrent);
 
             List<MonitorMode> monitorModes = monitor.getSupportedModes();
             if (null == monitorModes) {
@@ -206,10 +205,10 @@ public class GameWindow implements GLEventListener {
             monitorModes = MonitorModeUtil.getHighestAvailableBpp(monitorModes);
 
             MonitorMode mm = monitorModes.get(0);
-            System.err.println("[0] set current: " + mm);
+            System.out.println("[0] set current: " + mm);
             monitor.setCurrentMode(mm);
 
-            System.err.print("[0] post setting .. wait <");
+            System.out.print("[0] post setting .. wait <");
 
         } else {
             canvas.setFullscreen(false);
@@ -233,7 +232,6 @@ public class GameWindow implements GLEventListener {
 
         canvas.addWindowListener(new WindowAdapter() {
             public void windowDestroyNotify(WindowEvent e) {
-//                canvas.destroy();
                 animator.stop();
                 System.exit(0);
             }
@@ -242,10 +240,10 @@ public class GameWindow implements GLEventListener {
         Animator ani = new Animator(canvas);
         ani.setRunAsFastAsPossible(true);
         animator = ani;
-//        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
+//      FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
 
-//        animator = fpsanimator;
-//        animator.add(canvas);
+//      animator = fpsanimator;
+//      animator.add(canvas);
         animator.start();
 
     }
@@ -289,9 +287,14 @@ public class GameWindow implements GLEventListener {
 
         // Render scene
         if (currentGameState != null) {
+
+
             currentGameState.onRender(gl, interpolation);
         }
+        renderer.beginRendering(windowWidth, windowHeight);
+        renderer.draw("FPS:" + fps, 10, 0);
 
+        renderer.endRendering();
 
         if (getMilliSeconds() < fpsTimer) {
             fpsFrame++;
@@ -302,10 +305,7 @@ public class GameWindow implements GLEventListener {
 
         }
 
-        renderer.beginRendering(windowWidth, windowHeight);
-        renderer.draw("Frames:" + fps + "/s", 10, windowHeight - 20);
 
-        renderer.endRendering();
     }
 
     @Override
@@ -325,12 +325,16 @@ public class GameWindow implements GLEventListener {
         JoglInputSystem inputsystem = new JoglInputSystem(GameWindow.getGameWindow().getCanvas());
         GameWindow.getGameWindow().getCanvas().addMouseListener(inputsystem);
 
+
         BatchRenderBackend backend = JoglBatchRenderBackendFactory.create(this.canvas);
 
+//        JoglBatchRenderBackendFactory.create(this.canvas);
+
         RenderDevice renderDevice = new BatchRenderDevice(backend);
+
         GameWindow.nifty = new Nifty(renderDevice, new NullSoundDevice(), inputsystem, new AccurateTimeProvider());
-        Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE);
-        Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE);
+//        Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE);
+//        Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE);
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
 

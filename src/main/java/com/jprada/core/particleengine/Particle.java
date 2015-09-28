@@ -2,6 +2,7 @@ package com.jprada.core.particleengine;
 
 import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.Sprite;
+import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.util.GLColor;
 
 public class Particle {
@@ -54,7 +55,7 @@ public class Particle {
 		
 	}
 	
-	public void draw(RenderBatch batch) {
+	public void draw(SpriteBatch batch) {
 		
 		
 		

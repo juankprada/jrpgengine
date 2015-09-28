@@ -3,6 +3,7 @@ package com.jprada.core.entity;
 import com.jogamp.opengl.GL;
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.RenderBatch;
+import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.states.WorldMapState;
 import com.jprada.core.util.GLColor;
 
@@ -49,7 +50,7 @@ public class GameCharacter extends Entity {
 	}
 	
 	@Override
-	public void onRender(RenderBatch batch, double interpolation) {
+	public void onRender(SpriteBatch batch, double interpolation) {
 
 		
 		
@@ -63,7 +64,7 @@ public class GameCharacter extends Entity {
 		}
 		
 		batch.draw(this.currentAnimation.getNextFrame(), drawX, drawY);
-		// batch.draw(texture, 100, 100);
+
 
 	}
 	

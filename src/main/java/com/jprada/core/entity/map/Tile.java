@@ -11,6 +11,7 @@ import com.jprada.core.entity.utils.CollideBox;
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.Animation;
 import com.jprada.core.graphics.RenderBatch;
+import com.jprada.core.graphics.SpriteBatch;
 
 /**
  * Created by Juan Camilo Prada on 17/10/2014.
@@ -62,7 +63,7 @@ public class Tile implements Collidable, Interactable{
     }
 
  
-    public void onRender(RenderBatch batch, double interpolation, float posX, float posY) {
+    public void onRender(SpriteBatch batch, double interpolation, float posX, float posY) {
         batch.draw(this.currentAnimation.getNextFrame(), posX, posY);
     }
 

@@ -26,7 +26,6 @@ public class WorldMapKeyListener extends Keyboard {
 				int keyCode = e.getKeyCode();
 
 				if (keyCode == KeyEvent.VK_SHIFT) {
-					System.out.println("Released Tab");
 					GameWindow.ENABLE_DEBUG_INFO = false;
 				}
 
@@ -44,7 +43,7 @@ public class WorldMapKeyListener extends Keyboard {
 						}
 					} else if (keyCode == KeyEvent.VK_RIGHT) {
 						this.keyStates[RIGHT_KEY] = false;
-						System.out.println("DOWN KEY STATE:"+keyStates[DOWN_KEY]);
+
 						if (keyStates[DOWN_KEY]) {
 							player.setMovingDirection(Direction.down);
 						} else if (keyStates[UP_KEY]) {
