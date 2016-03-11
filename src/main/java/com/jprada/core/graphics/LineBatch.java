@@ -10,6 +10,7 @@ import com.jprada.core.util.GLColor;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 
 /**
  * Created by JuanCamilo on 26/09/2015.
@@ -22,17 +23,14 @@ public class LineBatch {
             = // This matrix member variable provides a hook to manipulate
             // the coordinates of the objects that use this vertex shader
             "#version 110\n"
-                    + "uniform mat4 u_projectionViewMatrix;"
-                    + "uniform float u_linewidth;"
-                    + "attribute vec4 in_Position;"
-                    + "attribute vec2 in_Normal;"
-                    + "attribute vec4 in_Color;"
-                    + "varying vec4 pass_Color;"
-                    + "void main() {"
-                    + "  vec4 delta = vec4(in_Normal * u_linewidth, 0, 0);"
-                    + "  gl_Position = u_projectionViewMatrix * in_Position;"
-                    + "  pass_Color = in_Color;"
-                    + "}";
+            + "uniform mat4 u_projectionViewMatrix;"
+            + "attribute vec4 in_Position;"
+            + "attribute vec4 in_Color;"
+            + "varying vec4 pass_Color;"
+            + "void main() {"
+            + "  gl_Position = u_projectionViewMatrix * in_Position;"
+            + "  pass_Color = in_Color;"
+            + "}";
 
     private static final String LineFragmentShaderCode
             = "#version 110\n"
@@ -121,9 +119,6 @@ public class LineBatch {
         this.vertexCount = 0;
 
         setupLineRender();
-
-
-        this.vertices = new float[MAX_VERTEX * elementsInVertex];
         this.indicesCount = 0;
         this.vertexCount = 0;
         this.vertexElementsCount = 0;
@@ -144,7 +139,9 @@ public class LineBatch {
         this.elementsInVertexArray = this.elementsInVertex * this.vertexInFigure;
         this.indicesNumber = 2;
         this.vboStride = 24;
-
+        
+        // Float byte size is 4 (32 bit)
+        
         this.vertices = new float[MAX_VERTEX * elementsInVertex];
 
         int maxFigures = MAX_VERTEX / vertexInFigure;
@@ -152,12 +149,12 @@ public class LineBatch {
 
         this.indices = new int[indicesLength];
 
+        
         int j = 0;
-        for (int i = 0; i < indicesLength; i += 4, j += 4) {
+        for (int i = 0; i < indicesLength; i += 2, j += 2) {
             indices[i] = j;
             indices[i + 1] = (j + 1);
-            indices[i + 2] = (j + 2);
-            indices[i + 3] = (j + 3);
+           
         }
     }
 
@@ -166,8 +163,9 @@ public class LineBatch {
 
         // Sets the projection matrix to Ortho mode
         projectionMatrix.loadIdentity();
-        projectionMatrix.makeOrtho(0, w, h, 0, 1, -1);
-
+        //projectionMatrix.makeOrtho(0, w, h, 0, 1, -1);
+        projectionMatrix.makeOrtho(0, 640, 480, 0, 1, -1);
+        
         // Sets the view Matrix
         viewMatrix.loadIdentity();
         OrthoCamera camera = OrthoCamera.getInstance();
@@ -242,23 +240,37 @@ public class LineBatch {
         }
 
         GL gl = this.glInstance;
+        
+        
+//        System.arraycopy(this.vertices, 0, verticesArray, 0, this.vertexElementsCount);
+//        System.arraycopy(this.indices, 0, indicesArray, 0, this.indicesCount);
+//        
+//        
+//        FloatBuffer vertexBufferData = FloatBuffer.wrap(verticesArray, 0, this.vertexElementsCount);
+//        IntBuffer indexBufferData = IntBuffer.wrap(indicesArray, 0, this.indicesCount);
 
-        FloatBuffer vertexBufferData = FloatBuffer.wrap(this.vertices, 0, this.vertexElementsCount);
-        IntBuffer indexBufferData = IntBuffer.wrap(this.indices, 0, this.indicesCount);
-
+        
+        FloatBuffer vertexBufferData = FloatBuffer.allocate(this.vertexElementsCount);
+        System.arraycopy(this.vertices, 0, vertexBufferData.array(), 0, this.vertexElementsCount);
+                
+                //FloatBuffer.wrap(verticesArray, 0, this.vertexElementsCount);
+        IntBuffer indexBufferData = IntBuffer.allocate(this.indicesCount);
+        System.arraycopy(this.indices, 0, indexBufferData.array(), 0, this.indicesCount);
+        
+        
         shaderProgram.use(gl);
         shaderProgram.setUniformMatrix(gl, matrix_location, false, MVP);
 
 
-            gl.getGL2().glDisable(GL2.GL_DEPTH_BUFFER_BIT);
-            gl.getGL2().glEnable(GL2.GL_TEXTURE_2D);
-            gl.getGL2().glEnable(GL2.GL_BLEND);
+        //    gl.getGL2().glDisable(GL2.GL_DEPTH_BUFFER_BIT);
+            //gl.getGL2().glEnable(GL2.GL_TEXTURE_2D);
+            //gl.getGL2().glEnable(GL2.GL_BLEND);
 
-            if (this.sfactor == null || this.dfactor == null) {
-                gl.getGL2().glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-            } else {
-                gl.getGL2().glBlendFunc(this.sfactor, this.dfactor);
-            }
+//            if (this.sfactor == null || this.dfactor == null) {
+//                gl.getGL2().glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+//            } else {
+//                gl.getGL2().glBlendFunc(this.sfactor, this.dfactor);
+//            }
 
 //           gl.glActiveTexture(GL.GL_TEXTURE0);
 
@@ -283,8 +295,9 @@ public class LineBatch {
 //       gl.getGL2().glEnableVertexAttribArray(in_text_coord_location);
         gl.getGL2().glDrawElements(GL2.GL_LINES, this.indicesCount, GL2.GL_UNSIGNED_INT, 0L);
 
-
-        this.vertices = new float[MAX_VERTEX * elementsInVertex];
+        
+        //this.vertices = new float[MAX_VERTEX * elementsInVertex];
+        Arrays.fill(this.vertices, 0.0f);
         this.indicesCount = 0;
         this.vertexCount = 0;
         this.vertexElementsCount = 0;

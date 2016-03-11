@@ -10,6 +10,7 @@ import com.jprada.core.util.GLColor;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 
 /**
  * Created by JuanCamilo on 26/09/2015.
@@ -119,7 +120,7 @@ public class SpriteBatch {
 
         setupTextureRender();
 
-        this.vertices = new float[MAX_VERTEX * elementsInVertex];
+
         this.indicesCount = 0;
         this.vertexCount = 0;
         this.vertexElementsCount = 0;
@@ -163,7 +164,8 @@ public class SpriteBatch {
     private void setupMatrixes(int w, int h) {
         // Sets the projection matrix to Ortho mode
         projectionMatrix.loadIdentity();
-        projectionMatrix.makeOrtho(0, w, h, 0, 1, -1);
+        //projectionMatrix.makeOrtho(0, w, h, 0, 1, -1);
+        projectionMatrix.makeOrtho(0, 640, 480, 0, 1, -1);
 
         // Sets the view Matrix
         viewMatrix.loadIdentity();
@@ -393,8 +395,20 @@ public class SpriteBatch {
 
         GL gl = this.glInstance;
 
-        FloatBuffer vertexBufferData = FloatBuffer.wrap(this.vertices, 0, this.vertexElementsCount);
-        IntBuffer indexBufferData = IntBuffer.wrap(this.indices, 0, this.indicesCount);
+     
+        
+       
+        
+        
+        
+        
+        FloatBuffer vertexBufferData = FloatBuffer.allocate(this.vertexElementsCount);
+        System.arraycopy(this.vertices, 0, vertexBufferData.array(), 0, this.vertexElementsCount);
+                
+                //FloatBuffer.wrap(verticesArray, 0, this.vertexElementsCount);
+        IntBuffer indexBufferData = IntBuffer.allocate(this.indicesCount);
+        System.arraycopy(this.indices, 0, indexBufferData.array(), 0, this.indicesCount);
+                //IntBuffer.wrap(indicesArray, 0, this.indicesCount);
 
         shaderProgram.use(gl);
         shaderProgram.setUniformMatrix(gl, matrix_location, false, MVP);
@@ -435,7 +449,8 @@ public class SpriteBatch {
         gl.getGL2().glDrawElements(GL2.GL_TRIANGLES, this.indicesCount, GL2.GL_UNSIGNED_INT, 0L);
 
 
-        this.vertices = new float[MAX_VERTEX * elementsInVertex];
+        //this.vertices = new float[MAX_VERTEX * elementsInVertex];
+        Arrays.fill(this.vertices, 0.0f);
         this.indicesCount = 0;
         this.vertexCount = 0;
         this.vertexElementsCount = 0;

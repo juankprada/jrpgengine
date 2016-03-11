@@ -35,15 +35,15 @@ public class WorldMapState extends GameState {
 
 	// private SpriteBatch spriteBatch;
 	private SpriteBatch spriteBatch;
-	
+	private LineBatch lineBatch;
 
 	// public static List<Actor> worldMapObjects = new ArrayList<Actor>();
 
 	private Keyboard keyListener;
 
-	ParticleEmitter particleEngine;
-	ParticleEmitter particleEngine2;
-	ParticleEmitter particleEngine3;
+//	ParticleEmitter particleEngine;
+//	ParticleEmitter particleEngine2;
+//	ParticleEmitter particleEngine3;
 
 	// Tile[][] tileArray = new Tile[25][19];
 
@@ -70,7 +70,9 @@ public class WorldMapState extends GameState {
 		spriteBatch = new SpriteBatch(gl);
 		spriteBatch.setup(gl);
 
-		
+		lineBatch = new LineBatch(gl);
+                lineBatch.setup(gl);
+                
 
 		PLAYER = (GameCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml", GameCharacter.class);
 		GameCharacter p2 = (GameCharacter) CharacterXMLImporter.loadCharacterSheet("main-player.xml",
@@ -85,18 +87,18 @@ public class WorldMapState extends GameState {
 		p3.setOnInteractScript("Wait(2000)\nSetPlayerPosition(300, 300)\nSetActorPosition(Me, 400, 500)");
 
 		this.keyListener = new WorldMapKeyListener(PLAYER);
-
-		particleEngine = new ParticleEmitter(null, 200, 200);
-		particleEngine2 = new ParticleEmitter(null, 200, 200);
-		particleEngine3 = new ParticleEmitter(null, 400, 220);
+//
+//		particleEngine = new ParticleEmitter(null, 200, 200);
+//		particleEngine2 = new ParticleEmitter(null, 200, 200);
+//		particleEngine3 = new ParticleEmitter(null, 400, 220);
 		
 		
 
 		currentMap = new TileMap();
 		if (currentMap.getLayers() != null && !currentMap.getLayers().isEmpty()) {
-			particleEngine.setCurrentLayer(0);
+//			particleEngine.setCurrentLayer(0);
 			
-			currentMap.getLayers().get(0).addActor(particleEngine);
+//			currentMap.getLayers().get(0).addActor(particleEngine);
 			PLAYER.setCurrentLayer(0);
 			currentMap.getLayers().get(0).addActor(PLAYER);
 			
@@ -112,8 +114,9 @@ public class WorldMapState extends GameState {
 		scr = createIntroScreen(GameWindow.nifty, new MyScreenController());
 
 
-
+               
 		GameWindow.nifty.gotoScreen("start");
+                 GameWindow.nifty.resolutionChanged();
 	}
 
 	
@@ -206,8 +209,11 @@ public class WorldMapState extends GameState {
 		
 		currentMap.onRender(gl, spriteBatch, interpolation);
 
-
-		// DEBUG INFO
+                 lineBatch.begin(gl);
+                 lineBatch.draw(100,100, 400, 100, new GLColor(1f, 0f, 0f, 1f));
+                 lineBatch.end();
+	
+                 // DEBUG INFO
 //		if (GameWindow.ENABLE_DEBUG_INFO) {
 //			spriteBatch.setup(gl, RenderMode.LINE);
 //			currentMap.onRenderDebug(gl, spriteBatch, interpolation);

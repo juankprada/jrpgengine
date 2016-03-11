@@ -12,7 +12,7 @@ public class GameApp {
 
     public static void main(String args[]) {
     	
-        GameWindow.setGameWindowParameters(800, 600, "My Game Application", 0.4f, 0.6f, 0.9f, 0f);
+        GameWindow.setGameWindowParameters(1024, 768, "My Game Application", 0.4f, 0.6f, 0.9f, 0f);
         GameWindow gameWin = GameWindow.createGameWindow();
     }
 }

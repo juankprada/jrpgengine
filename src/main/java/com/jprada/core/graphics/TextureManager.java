@@ -28,7 +28,7 @@ public class TextureManager {
 		try {
 
 			InputStream is = new FileInputStream(image);
-			texture = TextureIO.newTexture(is, true,"png");
+			texture = TextureIO.newTexture(is, false,"png");
 			
 			loadedTextures.put(image.getName(), texture);
 		} catch (GLException | IOException e) {

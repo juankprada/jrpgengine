@@ -114,7 +114,6 @@ public class WorldMapKeyListener extends Keyboard {
 					}
 				} else if (keyCode == KeyEvent.VK_DOWN) {
 					this.keyStates[DOWN_KEY] = true;
-					System.out.println("PRessed DOWN");
 					if (player.getMovingDirection() != Direction.down) {
 						player.setMovingDirection(Direction.down);
 					}

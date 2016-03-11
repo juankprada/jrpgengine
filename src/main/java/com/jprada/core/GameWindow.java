@@ -1,7 +1,6 @@
 package com.jprada.core;
 
 import java.awt.Font;
-import java.awt.Frame;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -24,8 +23,8 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.AnimatorBase;
+import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jprada.core.events.EventManager;
 import com.jprada.core.events.JythonManager;
@@ -37,7 +36,6 @@ import de.lessvoid.nifty.nulldevice.NullSoundDevice;
 import de.lessvoid.nifty.render.batch.BatchRenderDevice;
 import de.lessvoid.nifty.render.batch.spi.BatchRenderBackend;
 import de.lessvoid.nifty.renderer.jogl.input.JoglInputSystem;
-import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendCoreProfileFactory;
 import de.lessvoid.nifty.renderer.jogl.render.JoglBatchRenderBackendFactory;
 import de.lessvoid.nifty.spi.render.RenderDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
@@ -71,7 +69,6 @@ public class GameWindow implements GLEventListener {
     public static EventManager eventManager;
     private JythonManager scriptManager;
 
-
     public static Nifty nifty;
     private static final int MAX_FRAMESKIP = 5;
 
@@ -95,8 +92,6 @@ public class GameWindow implements GLEventListener {
     public static GameState currentGameState = null;
 
     Random randomGenerator = new Random();
-
-    private Frame frame;
 
     private GameWindow() {
         this.running = true;
@@ -182,7 +177,6 @@ public class GameWindow implements GLEventListener {
         canvas.addGLEventListener(this);
         canvas.setTitle(windowTitle);
 
-
         if (fullscreen) {
             canvas.setFullscreen(fullscreen);
             canvas.setUndecorated(true);
@@ -213,22 +207,13 @@ public class GameWindow implements GLEventListener {
         } else {
             canvas.setFullscreen(false);
 
-
             NewtCanvasAWT canvasAWT = new NewtCanvasAWT(canvas);
             canvasAWT.setVisible(true);
             canvasAWT.setSize(windowWidth, windowHeight);
 
-            frame = new Frame(windowTitle);
-            frame.add(canvasAWT);
-
-            frame.setResizable(false);
-            frame.pack();
-            frame.setVisible(true);
-
             canvas.setVisible(true);
 
         }
-
 
         canvas.addWindowListener(new WindowAdapter() {
             public void windowDestroyNotify(WindowEvent e) {
@@ -237,17 +222,15 @@ public class GameWindow implements GLEventListener {
             }
         });
 
-        Animator ani = new Animator(canvas);
-        ani.setRunAsFastAsPossible(true);
-        animator = ani;
-//      FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
-
-//      animator = fpsanimator;
-//      animator.add(canvas);
+        //Animator ani = new Animator(canvas);
+        //ani.setRunAsFastAsPossible(true);
+        //animator = ani;
+        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
+        animator = fpsanimator;
+        animator.add(canvas);
         animator.start();
 
     }
-
 
     public void setCanvas(GLWindow canvas) {
         this.canvas = canvas;
@@ -261,7 +244,6 @@ public class GameWindow implements GLEventListener {
 
         loops = 0;
 
-
         while (getMilliSeconds() > nextGameTick && loops < MAX_FRAMESKIP) {
             // update game state
 
@@ -273,21 +255,16 @@ public class GameWindow implements GLEventListener {
 
             }
 
-
             nextGameTick += skipTicks;
             loops++;
         }
 
-
         interpolation = (getMilliSeconds() + skipTicks - nextGameTick) / skipTicks;
-
 
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 
-
         // Render scene
         if (currentGameState != null) {
-
 
             currentGameState.onRender(gl, interpolation);
         }
@@ -305,7 +282,6 @@ public class GameWindow implements GLEventListener {
 
         }
 
-
     }
 
     @Override
@@ -321,20 +297,17 @@ public class GameWindow implements GLEventListener {
     public void init(GLAutoDrawable drawable) {
         GL gl = drawable.getGL();
 
-
         JoglInputSystem inputsystem = new JoglInputSystem(GameWindow.getGameWindow().getCanvas());
         GameWindow.getGameWindow().getCanvas().addMouseListener(inputsystem);
-
 
         BatchRenderBackend backend = JoglBatchRenderBackendFactory.create(this.canvas);
 
 //        JoglBatchRenderBackendFactory.create(this.canvas);
-
         RenderDevice renderDevice = new BatchRenderDevice(backend);
 
         GameWindow.nifty = new Nifty(renderDevice, new NullSoundDevice(), inputsystem, new AccurateTimeProvider());
-//        Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE);
-//        Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE);
+        Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE);
+        Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE);
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
 
@@ -353,9 +326,7 @@ public class GameWindow implements GLEventListener {
         eventManager = EventManager.getEventManager();
         scriptManager.initJythonInterpreter();
 
-
     }
-
 
     public boolean isRunning() {
         return running;
@@ -386,6 +357,5 @@ public class GameWindow implements GLEventListener {
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
     }
-
 
 }
