@@ -3,6 +3,7 @@ package com.jprada.core.graphics;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.math.Matrix4;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jprada.core.GameWindow;
@@ -132,7 +133,7 @@ public class SpriteBatch {
         texture_location = this.shaderProgram.getUniformLocation(gl, "texture_diffuse");
         matrix_location = this.shaderProgram.getUniformLocation(gl, "u_projectionViewMatrix");
 
-        setupMatrixes(GameWindow.getWindowWidth(), GameWindow.getWindowHeight());
+        setupMatrixes();
     }
 
     private void setupTextureRender() {
@@ -161,11 +162,12 @@ public class SpriteBatch {
         }
     }
 
-    private void setupMatrixes(int w, int h) {
+    private void setupMatrixes() {
         // Sets the projection matrix to Ortho mode
+    	
         projectionMatrix.loadIdentity();
-        //projectionMatrix.makeOrtho(0, w, h, 0, 1, -1);
-        projectionMatrix.makeOrtho(0, 640, 480, 0, 1, -1);
+        projectionMatrix.makeOrtho(0, GameWindow.windowWidth, GameWindow.windowHeight, 0, -1, 1);
+        
 
         // Sets the view Matrix
         viewMatrix.loadIdentity();
@@ -174,9 +176,18 @@ public class SpriteBatch {
 
         // Sets the model matrix as the identity
         modelMatrix.loadIdentity();
+        
+        modelMatrix.multMatrix(viewMatrix);
+        float scaleX = (float)((float)GameWindow.windowWidth/(float)GameWindow.virtualWidth);
+      	float scaleY = (float)((float)GameWindow.windowHeight/(float)GameWindow.virtualHeight);
 
-        projectionMatrix.multMatrix(viewMatrix);
+      	modelMatrix.scale(scaleX, scaleY, 1.0f);
+
         projectionMatrix.multMatrix(modelMatrix);
+       // projectionMatrix.multMatrix(modelMatrix);
+        
+        //projectionMatrix.scale(scaleX, scaleY, 1.0f);
+        
         MVP = projectionMatrix;
 
     }
@@ -204,9 +215,11 @@ public class SpriteBatch {
         this.glInstance = gl;
 
         this.drawing = true;
-
+       
+        //gl.glViewport(GameWindow.vp_x, GameWindow.vp_y, GameWindow.vp_width, GameWindow.vp_height);
+        
         // Push client attrib bits used by the pipelined quad renderer
-        gl.getGL2().glPushClientAttrib((int) GL2.GL_ALL_CLIENT_ATTRIB_BITS);
+        //gl.getGL2().glPushClientAttrib((int) GL2.GL_ALL_CLIENT_ATTRIB_BITS);
     }
 
     public void draw(SpriteFrame region, float posx, float posy) {
@@ -416,8 +429,11 @@ public class SpriteBatch {
 
         gl.getGL2().glDisable(GL2.GL_DEPTH_BUFFER_BIT);
         gl.getGL2().glEnable(GL2.GL_TEXTURE_2D);
+        
+       
+        
         gl.getGL2().glEnable(GL2.GL_BLEND);
-
+        
         if (this.sfactor == null || this.dfactor == null) {
             gl.getGL2().glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
         } else {
@@ -474,7 +490,7 @@ public class SpriteBatch {
         GL gl = this.glInstance;
 
         // Pop client attrib bits used by the pipelined quad renderer
-        gl.getGL2().glPopClientAttrib();
+        //gl.getGL2().glPopClientAttrib();
 
         gl.getGL2().glDisableVertexAttribArray(in_position_location);
         gl.getGL2().glDisableVertexAttribArray(in_color_location);

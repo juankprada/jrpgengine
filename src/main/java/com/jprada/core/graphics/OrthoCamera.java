@@ -48,8 +48,8 @@ public class OrthoCamera {
 
 	public void setPosition(float posx, float posy) {
 		if (centerScreen) {
-			int w = GameWindow.getWindowWidth();
-			int h = GameWindow.getWindowHeight();
+			int w = GameWindow.windowWidth;
+			int h = GameWindow.windowHeight;
 			
 			int wHalved = (w/2);
 			int hHalved = (h/2);

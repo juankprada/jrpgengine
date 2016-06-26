@@ -2,22 +2,17 @@ package com.jprada.core.states;
 
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jprada.core.GameWindow;
 import com.jprada.core.entity.CharacterXMLImporter;
 import com.jprada.core.entity.GameCharacter;
 import com.jprada.core.entity.Npc;
 import com.jprada.core.entity.map.TileMap;
 import com.jprada.core.entity.utils.ObjectInteraction;
 import com.jprada.core.graphics.LineBatch;
-import com.jprada.core.graphics.RenderBatch;
-import com.jprada.core.graphics.RenderBatch.RenderMode;
 import com.jprada.core.graphics.SpriteBatch;
-import com.jprada.core.particleengine.ParticleEmitter;
 import com.jprada.core.states.input.Keyboard;
 import com.jprada.core.states.input.WorldMapKeyListener;
-
 import com.jprada.core.util.GLColor;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.builder.EffectBuilder;
@@ -111,12 +106,12 @@ public class WorldMapState extends GameState {
 
 
 		
-		scr = createIntroScreen(GameWindow.nifty, new MyScreenController());
+//		scr = createIntroScreen(GameWindow.nifty, new MyScreenController());
 
 
                
-		GameWindow.nifty.gotoScreen("start");
-                 GameWindow.nifty.resolutionChanged();
+//		GameWindow.nifty.gotoScreen("start");
+//                 GameWindow.nifty.resolutionChanged();
 	}
 
 	
@@ -195,7 +190,7 @@ public class WorldMapState extends GameState {
 
 		currentMap.onUpdate();
 
-		GameWindow.nifty.update();
+//		GameWindow.nifty.update();
 	}
 
 	@Override
@@ -227,14 +222,14 @@ public class WorldMapState extends GameState {
 
 
 
-		GameWindow.nifty.render(false);
+//		GameWindow.nifty.render(false);
 
 	}
 
 	@Override
 	public void onFinish(GL gl) {
 		// TODO Auto-generated method stub
-		GameWindow.nifty.exit();
+//		GameWindow.nifty.exit();
 	}
 
 }

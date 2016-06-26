@@ -19,8 +19,10 @@ import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.newt.util.MonitorModeUtil;
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.AnimatorBase;
@@ -42,320 +44,376 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 public class GameWindow implements GLEventListener {
 
-    // Window size definition
-    private static int windowHeight = 800;
-    private static int windowWidth = 600;
+	// Window size definition
+	public static int windowWidth= 800;
+	public static int windowHeight = 600;
 
-    private static boolean fullscreen = false;
+	public static final int virtualWidth = 640;
+	public static final int virtualHeight = 480;
 
-    public static boolean ENABLE_DEBUG_INFO = false;
+	private static boolean fullscreen = false;
 
-    // Clear Color definition
-    private static float clearColor_r;
-    private static float clearColor_g;
-    private static float clearColor_b;
-    private static float clearColor_a;
+	public static boolean ENABLE_DEBUG_INFO = false;
 
-    private static String windowTitle = "RPG Game Project";
+	// Clear Color definition
+	private static float clearColor_r;
+	private static float clearColor_g;
+	private static float clearColor_b;
+	private static float clearColor_a;
 
-    private final int TARGET_FPS = 60;
+	private static String windowTitle = "RPG Game Project";
 
-    private GLWindow canvas;
-    private boolean running;
-    private AnimatorBase animator;
-    private KeyListener currentKeyListener;
-    private MouseListener currentMouseListener;
+	private final int TARGET_FPS = 60;
 
-    public static EventManager eventManager;
-    private JythonManager scriptManager;
+	private GLWindow canvas;
+	private boolean running;
+	private AnimatorBase animator;
+	private KeyListener currentKeyListener;
+	private MouseListener currentMouseListener;
 
-    public static Nifty nifty;
-    private static final int MAX_FRAMESKIP = 5;
+	public static EventManager eventManager;
+	private JythonManager scriptManager;
 
-    private static double nextGameTick;
-    private static int sleepTime = 0;
-    private static double skipTicks = 1000.0 / 25.0;
-    private static int loops = 0;
-    private static double interpolation = 0;
+	public static Nifty nifty;
+	private static final int MAX_FRAMESKIP = 5;
 
-    private static double fpsTimer;
-    private static int fpsFrame = 1;
-    private static int fps = 0;
+	private static double nextGameTick;
+	private static int sleepTime = 0;
+	private static double skipTicks = 1000.0 / 25.0;
+	private static int loops = 0;
+	private static double interpolation = 0;
 
-    private int screenIdx = 0;
-    // Instance of the game window
-    private static GameWindow _instance = null;
-    Runtime runtime = Runtime.getRuntime();
-    private TextRenderer renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 12));
+	private static double fpsTimer;
+	private static int fpsFrame = 1;
+	private static int fps = 0;
 
-    // current game state
-    public static GameState currentGameState = null;
+	private int screenIdx = 0;
+	// Instance of the game window
+	private static GameWindow _instance = null;
+	Runtime runtime = Runtime.getRuntime();
+	private TextRenderer renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 12));
 
-    Random randomGenerator = new Random();
+	// current game state
+	public static GameState currentGameState = null;
 
-    private GameWindow() {
-        this.running = true;
-    }
+	Random randomGenerator = new Random();
 
-    public static double getMilliSeconds() {
-        return System.nanoTime() / 1000000.0;
-    }
+	private GameWindow() {
+		this.running = true;
+	}
 
-    public static void setGameWindowParameters(int windowWidth, int windowHeight) {
-        GameWindow.windowWidth = windowWidth;
-        GameWindow.windowHeight = windowHeight;
-    }
+	public static double getMilliSeconds() {
+		return System.nanoTime() / 1000000.0;
+	}
 
-    public static void setGameWindowParameters(int windowWidth, int windowHeight, String windowTitle) {
-        setGameWindowParameters(windowWidth, windowHeight);
-        GameWindow.windowTitle = windowTitle;
-    }
+	public static void setGameWindowParameters(int windowWidth, int windowHeight) {
+		GameWindow.windowWidth = windowWidth;
+		GameWindow.windowHeight = windowHeight;
+	}
 
-    public static void setGameWindowParameters(int windowWidth, int windowHeight, String windowTitlem, float r, float g, float b) {
-        setGameWindowParameters(windowWidth, windowHeight, windowTitle);
-        GameWindow.clearColor_r = r;
-        GameWindow.clearColor_g = g;
-        GameWindow.clearColor_b = b;
+	public static void setGameWindowParameters(int windowWidth, int windowHeight, String windowTitle) {
+		setGameWindowParameters(windowWidth, windowHeight);
+		GameWindow.windowTitle = windowTitle;
+	}
 
-    }
+	public static void setGameWindowParameters(int windowWidth, int windowHeight, String windowTitlem, float r, float g,
+			float b) {
+		setGameWindowParameters(windowWidth, windowHeight, windowTitle);
+		GameWindow.clearColor_r = r;
+		GameWindow.clearColor_g = g;
+		GameWindow.clearColor_b = b;
 
-    public static void setGameWindowParameters(int windowWidth, int windowHeight, String windowTitlem, float r, float g, float b, float a) {
-        setGameWindowParameters(windowWidth, windowHeight, windowTitle, r, g, b);
-        GameWindow.clearColor_a = a;
+	}
 
-    }
+	public static void setGameWindowParameters(int windowWidth, int windowHeight, String windowTitlem, float r, float g,
+			float b, float a) {
+		setGameWindowParameters(windowWidth, windowHeight, windowTitle, r, g, b);
+		GameWindow.clearColor_a = a;
 
-    public static GameWindow getGameWindow() {
-        if (GameWindow._instance == null) {
-            return createGameWindow();
-        } else {
-            return GameWindow._instance;
-        }
+	}
 
-    }
+	public static GameWindow getGameWindow() {
+		if (GameWindow._instance == null) {
+			return createGameWindow();
+		} else {
+			return GameWindow._instance;
+		}
 
-    public static GameWindow createGameWindow() {
+	}
 
-        if (GameWindow._instance != null) {
-            return GameWindow._instance;
-        }
+	public static GameWindow createGameWindow() {
 
-        GameWindow._instance = new GameWindow();
+		if (GameWindow._instance != null) {
+			return GameWindow._instance;
+		}
 
-        GameWindow._instance.createDisplay();
+		GameWindow._instance = new GameWindow();
 
-        interpolation = 1;
-        nextGameTick = getMilliSeconds();
-        skipTicks = 1000.0 / 25.0;
-        fpsTimer = getMilliSeconds() + 1000;
-        fpsFrame = 1;
-        fps = 0;
+		GameWindow._instance.createDisplay();
 
-        return GameWindow._instance;
-    }
+		interpolation = 1;
+		nextGameTick = getMilliSeconds();
+		skipTicks = 1000.0 / 25.0;
+		fpsTimer = getMilliSeconds() + 1000;
+		fpsFrame = 1;
+		fps = 0;
 
-    public static int getWindowHeight() {
-        return windowHeight;
-    }
+		return GameWindow._instance;
+	}
 
-    public static int getWindowWidth() {
-        return windowWidth;
-    }
+	public void createDisplay() {
 
-    public void createDisplay() {
+		GLProfile glp = GLProfile.get(GLProfile.GL2);
 
-        GLProfile glp = GLProfile.get(GLProfile.GL2);
+		GLCapabilities caps = new GLCapabilities(glp);
 
-        GLCapabilities caps = new GLCapabilities(glp);
+		Display dpy = NewtFactory.createDisplay(null);
+		Screen screen = NewtFactory.createScreen(dpy, screenIdx);
 
-        Display dpy = NewtFactory.createDisplay(null);
-        Screen screen = NewtFactory.createScreen(dpy, screenIdx);
+		caps.setOnscreen(true);
+		canvas = GLWindow.create(screen, caps);
 
-        caps.setOnscreen(true);
-        canvas = GLWindow.create(screen, caps);
-        canvas.setSize(windowWidth, windowHeight);
-        canvas.addGLEventListener(this);
-        canvas.setTitle(windowTitle);
+		canvas.setTitle(windowTitle);
 
-        if (fullscreen) {
-            canvas.setFullscreen(fullscreen);
-            canvas.setUndecorated(true);
-            canvas.setVisible(true);
+		if (fullscreen) {
+			canvas.setFullscreen(fullscreen);
+			canvas.setUndecorated(true);
+			canvas.setVisible(true);
 
-            MonitorDevice monitor = canvas.getMainMonitor();
-            MonitorMode mmCurrent = monitor.queryCurrentMode();
-            MonitorMode mmOrig = monitor.getOriginalMode();
+			MonitorDevice monitor = canvas.getMainMonitor();
+			MonitorMode mmCurrent = monitor.queryCurrentMode();
+			MonitorMode mmOrig = monitor.getOriginalMode();
 
-            List<MonitorMode> monitorModes = monitor.getSupportedModes();
-            if (null == monitorModes) {
-                System.err.println("Your platform has no ScreenMode change support, Sorry");
-                return;
-            }
+			List<MonitorMode> monitorModes = monitor.getSupportedModes();
+			if (null == monitorModes) {
+				System.err.println("Your platform has no ScreenMode change support, Sorry");
+				return;
+			}
 
-            monitorModes = MonitorModeUtil.filterByFlags(monitorModes, 0); // no interlace, double-scan etc
-            monitorModes = MonitorModeUtil.filterByRotation(monitorModes, 0);
-//            monitorModes = MonitorModeUtil.filterByResolution(monitorModes, Dimension(windowWidth + 1, windowHeight + 1));
-            monitorModes = MonitorModeUtil.filterByRate(monitorModes, mmOrig.getRefreshRate());
-            monitorModes = MonitorModeUtil.getHighestAvailableBpp(monitorModes);
+			monitorModes = MonitorModeUtil.filterByFlags(monitorModes, 0); // no
+																			// interlace,
+																			// double-scan
+																			// etc
+			monitorModes = MonitorModeUtil.filterByRotation(monitorModes, 0);
+			// monitorModes = MonitorModeUtil.filterByResolution(monitorModes,
+			// Dimension(windowWidth + 1, windowHeight + 1));
+			monitorModes = MonitorModeUtil.filterByRate(monitorModes, mmOrig.getRefreshRate());
+			monitorModes = MonitorModeUtil.getHighestAvailableBpp(monitorModes);
 
-            MonitorMode mm = monitorModes.get(0);
-            System.out.println("[0] set current: " + mm);
-            monitor.setCurrentMode(mm);
+			MonitorMode mm = monitorModes.get(0);
 
-            System.out.print("[0] post setting .. wait <");
+			GameWindow.windowWidth = mm.getRotatedWidth();
+			GameWindow.windowHeight = mm.getRotatedHeight();
 
-        } else {
-            canvas.setFullscreen(false);
+			System.out.println("[0] set current: " + mm);
+			monitor.setCurrentMode(mm);
 
-            NewtCanvasAWT canvasAWT = new NewtCanvasAWT(canvas);
-            canvasAWT.setVisible(true);
-            canvasAWT.setSize(windowWidth, windowHeight);
+			System.out.print("[0] post setting .. wait <");
 
-            canvas.setVisible(true);
+		} else {
+			canvas.setSize(windowWidth, windowHeight);
+			canvas.setFullscreen(false);
 
-        }
+			//
+			// NewtCanvasAWT canvasAWT = new NewtCanvasAWT(canvas);
+			// canvasAWT.setVisible(true);
+			// canvasAWT.setSize(windowWidth, windowHeight);
 
-        canvas.addWindowListener(new WindowAdapter() {
-            public void windowDestroyNotify(WindowEvent e) {
-                animator.stop();
-                System.exit(0);
-            }
-        });
+			canvas.setVisible(true);
 
-        //Animator ani = new Animator(canvas);
-        //ani.setRunAsFastAsPossible(true);
-        //animator = ani;
-        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
-        animator = fpsanimator;
-        animator.add(canvas);
-        animator.start();
+		}
+		canvas.addGLEventListener(this);
+		canvas.addWindowListener(new WindowAdapter() {
+			public void windowDestroyNotify(WindowEvent e) {
+				animator.stop();
+				System.exit(0);
+			}
+		});
 
-    }
+		// Animator ani = new Animator(canvas);
+		// ani.setRunAsFastAsPossible(true);
+		// animator = ani;
+		FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
+		animator = fpsanimator;
+		animator.add(canvas);
+		animator.start();
 
-    public void setCanvas(GLWindow canvas) {
-        this.canvas = canvas;
-    }
+	}
 
-    // Main Loop of the game
-    @Override
-    public void display(GLAutoDrawable drawable) {
+	public void setCanvas(GLWindow canvas) {
+		this.canvas = canvas;
+	}
 
-        GL gl = drawable.getGL().getGL2();
+	// Main Loop of the game
+	@Override
+	public void display(GLAutoDrawable drawable) {
 
-        loops = 0;
+		GL gl = drawable.getGL().getGL2();
 
-        while (getMilliSeconds() > nextGameTick && loops < MAX_FRAMESKIP) {
-            // update game state
+		loops = 0;
 
-            if (currentGameState != null) {
+		while (getMilliSeconds() > nextGameTick && loops < MAX_FRAMESKIP) {
+			// update game state
 
-                eventManager.update();
+			if (currentGameState != null) {
 
-                currentGameState.onUpdate(gl);
+				eventManager.update();
 
-            }
+				currentGameState.onUpdate(gl);
 
-            nextGameTick += skipTicks;
-            loops++;
-        }
+			}
 
-        interpolation = (getMilliSeconds() + skipTicks - nextGameTick) / skipTicks;
+			nextGameTick += skipTicks;
+			loops++;
+		}
 
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+		interpolation = (getMilliSeconds() + skipTicks - nextGameTick) / skipTicks;
 
-        // Render scene
-        if (currentGameState != null) {
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 
-            currentGameState.onRender(gl, interpolation);
-        }
-        renderer.beginRendering(windowWidth, windowHeight);
-        renderer.draw("FPS:" + fps, 10, 0);
+		// Render scene
+		if (currentGameState != null) {
 
-        renderer.endRendering();
+			currentGameState.onRender(gl, interpolation);
+		}
+		renderer.beginRendering(vp_width, vp_height);
+		renderer.draw("FPS:" + fps, 10, 0);
 
-        if (getMilliSeconds() < fpsTimer) {
-            fpsFrame++;
-        } else {
-            fps = fpsFrame;
-            fpsFrame = 1;
-            fpsTimer = getMilliSeconds() + 1000;
+		renderer.endRendering();
 
-        }
+		if (getMilliSeconds() < fpsTimer) {
+			fpsFrame++;
+		} else {
+			fps = fpsFrame;
+			fpsFrame = 1;
+			fpsTimer = getMilliSeconds() + 1000;
 
-    }
+		}
 
-    @Override
-    public void dispose(GLAutoDrawable drawable) {
+	}
 
-    }
+	@Override
+	public void dispose(GLAutoDrawable drawable) {
 
-    public GLWindow getCanvas() {
-        return canvas;
-    }
+	}
 
-    @Override
-    public void init(GLAutoDrawable drawable) {
-        GL gl = drawable.getGL();
+	public GLWindow getCanvas() {
+		return canvas;
+	}
 
-        JoglInputSystem inputsystem = new JoglInputSystem(GameWindow.getGameWindow().getCanvas());
-        GameWindow.getGameWindow().getCanvas().addMouseListener(inputsystem);
+	public static int vp_x;
+	public static int vp_y;
+	public static int vp_width;
+	public static int vp_height;
 
-        BatchRenderBackend backend = JoglBatchRenderBackendFactory.create(this.canvas);
+	@Override
+	public void init(GLAutoDrawable drawable) {
+		GL gl = drawable.getGL();
 
-//        JoglBatchRenderBackendFactory.create(this.canvas);
-        RenderDevice renderDevice = new BatchRenderDevice(backend);
+		JoglInputSystem inputsystem = new JoglInputSystem(GameWindow.getGameWindow().getCanvas());
+		GameWindow.getGameWindow().getCanvas().addMouseListener(inputsystem);
 
-        GameWindow.nifty = new Nifty(renderDevice, new NullSoundDevice(), inputsystem, new AccurateTimeProvider());
-        Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE);
-        Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE);
-        nifty.loadStyleFile("nifty-default-styles.xml");
-        nifty.loadControlFile("nifty-default-controls.xml");
+		//
+		targetAspectRatio = (float) virtualWidth / (float) virtualHeight;
 
-        gl.glDisable(GL.GL_DEPTH_TEST);
+		vp_width = GameWindow.windowWidth;
+		vp_height = (int) ((float) vp_width / (float) (targetAspectRatio) + 0.5f);
 
-        // Disable VSync
-        gl.setSwapInterval(0);
+		if (vp_height > GameWindow.windowHeight) {
+			// It doesnt fit our height, we must switch to pillarbox then
+			vp_height = GameWindow.windowHeight;
+			vp_width = (int) ((float) vp_height * (float) (targetAspectRatio) + 0.5f);
+		}
 
-        gl.glClearColor(clearColor_r, clearColor_g, clearColor_b, clearColor_a);
+		// setup the new viewport centered in the backbuffer
+		vp_x = (int) (((float) GameWindow.windowWidth / 2.0f) - ((float) vp_width / 2.0f));
+		vp_y = (int) (((float) GameWindow.windowHeight / 2.0f) - ((float) vp_height / 2.0f));
+		System.out.println("Reso:" + vp_x + "," + vp_y + "," + vp_width + "," + vp_height);
+		
+		drawable.getGL().glViewport(GameWindow.vp_x, GameWindow.vp_y, GameWindow.vp_width, GameWindow.vp_height);
+		//
 
-        currentGameState = new WorldMapState();
-        currentGameState.onInit(gl);
+		// BatchRenderBackend backend =
+		// JoglBatchRenderBackendFactory.create(this.canvas);
 
-        canvas.addKeyListener(currentGameState.getKeyListener());
+		// JoglBatchRenderBackendFactory.create(this.canvas);
+		// RenderDevice renderDevice = new BatchRenderDevice(backend);
+		//
+		// GameWindow.nifty = new Nifty(renderDevice, new NullSoundDevice(),
+		// inputsystem, new AccurateTimeProvider());
+		// Logger.getLogger("de.lessvoid.nifty").setLevel(Level.SEVERE);
+		// Logger.getLogger("NiftyInputEventHandlingLog").setLevel(Level.SEVERE);
+		// nifty.loadStyleFile("nifty-default-styles.xml");
+		// nifty.loadControlFile("nifty-default-controls.xml");
 
-        eventManager = EventManager.getEventManager();
-        scriptManager.initJythonInterpreter();
+		gl.glDisable(GL.GL_DEPTH_TEST);
 
-    }
+		// Disable VSync
+		// gl.setSwapInterval(0);
 
-    public boolean isRunning() {
-        return running;
-    }
+		gl.glClearColor(clearColor_r, clearColor_g, clearColor_b, clearColor_a);
 
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
+		currentGameState = new WorldMapState();
+		currentGameState.onInit(gl);
 
-    public void replaceMouseListener(MouseListener mouseListener) {
-        if (this.currentMouseListener != null) {
-            this.canvas.removeMouseListener(this.currentMouseListener);
-        }
+		canvas.addKeyListener(currentGameState.getKeyListener());
 
-        this.currentMouseListener = mouseListener;
-        this.canvas.addMouseListener(this.currentMouseListener);
-    }
+		eventManager = EventManager.getEventManager();
+		scriptManager.initJythonInterpreter();
 
-    public void replaceKeyListener(KeyListener keyListener) {
-        if (this.currentKeyListener != null) {
-            this.canvas.removeKeyListener(this.currentKeyListener);
-        }
+	}
 
-        this.currentKeyListener = keyListener;
-        this.canvas.addKeyListener(this.currentKeyListener);
-    }
+	public boolean isRunning() {
+		return running;
+	}
 
-    @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
-    }
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public void replaceMouseListener(MouseListener mouseListener) {
+		if (this.currentMouseListener != null) {
+			this.canvas.removeMouseListener(this.currentMouseListener);
+		}
+
+		this.currentMouseListener = mouseListener;
+		this.canvas.addMouseListener(this.currentMouseListener);
+	}
+
+	public void replaceKeyListener(KeyListener keyListener) {
+		if (this.currentKeyListener != null) {
+			this.canvas.removeKeyListener(this.currentKeyListener);
+		}
+
+		this.currentKeyListener = keyListener;
+		this.canvas.addKeyListener(this.currentKeyListener);
+	}
+	
+	public static float targetAspectRatio;
+
+	@Override
+	public void reshape(GLAutoDrawable drawable, int x, int y, int w, int h) {
+
+		targetAspectRatio = (float) virtualWidth / (float) virtualHeight;
+
+		GameWindow.windowWidth = w;
+		GameWindow.windowHeight = h;
+
+		vp_width = GameWindow.windowWidth;
+		vp_height = (int) ((float) vp_width / (float) (targetAspectRatio) + 0.5f);
+
+		if (vp_height > GameWindow.windowHeight) {
+			// It doesnt fit our height, we must switch to pillarbox then
+			vp_height = GameWindow.windowHeight;
+			vp_width = (int) ((float) vp_height * (float) (targetAspectRatio) + 0.5f);
+		}
+
+		// setup the new viewport centered in the backbuffer
+		vp_x = (int) (((float) GameWindow.windowWidth / 2.0f) - ((float) vp_width / 2.0f));
+		vp_y = (int) (((float) GameWindow.windowHeight / 2.0f) - ((float) vp_height / 2.0f));
+		System.out.println("Reso:" + vp_x + "," + vp_y + "," + vp_width + "," + vp_height);
+		
+		drawable.getGL().glViewport(GameWindow.vp_x, GameWindow.vp_y, GameWindow.vp_width, GameWindow.vp_height);
+	}
 
 }

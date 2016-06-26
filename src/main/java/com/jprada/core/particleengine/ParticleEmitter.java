@@ -9,7 +9,6 @@ import com.jogamp.opengl.GL;
 import com.jprada.core.entity.Actor;
 import com.jprada.core.entity.Collidable;
 import com.jprada.core.entity.Interactable;
-import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.Sprite;
 import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.util.GLColor;
@@ -150,11 +149,7 @@ public class ParticleEmitter extends Actor {
 		batch.setBlendFunc(GL.GL_SRC_ALPHA,GL.GL_ONE_MINUS_SRC_ALPHA);
 	}
 
-	@Override
-	public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void onUpdate() {

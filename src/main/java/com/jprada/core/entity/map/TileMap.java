@@ -28,8 +28,8 @@ public class TileMap {
 		tileSet = new ArrayList<Tile>();
 		layers = new ArrayList<Layer>();
 
-		this.widthInTiles = 25;
-		this.heightInTiles = 19;
+		this.widthInTiles = 32;
+		this.heightInTiles = 24;
 		this.tileWidth = 32;
 		this.tileHeight = 32;
 
@@ -117,24 +117,7 @@ public class TileMap {
 		}
 	}
 
-	public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
-		
-		batch.begin(gl);
-		
-		for (Layer l : layers) {
-
-			// Render actors in layer
-			if (l.getActors() != null && !l.getActors().isEmpty()) {
-				List<Actor> actors = RadixSort.sortEntities(l.getActors());
-				for (Actor actor : actors) {
-					actor.onRenderDebug(gl, batch, interpolation);
-				}
-			}
-
-		}
-		
-		batch.end();
-	}
+	
 	
 	public void onRender(GL gl, SpriteBatch batch, double interpolation) {
 

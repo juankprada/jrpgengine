@@ -130,7 +130,7 @@ public class LineBatch {
         texture_location = this.shaderProgram.getUniformLocation(gl, "texture_diffuse");
         matrix_location = this.shaderProgram.getUniformLocation(gl, "u_projectionViewMatrix");
 
-        setupMatrixes(GameWindow.getWindowWidth(), GameWindow.getWindowHeight());
+        setupMatrixes();
     }
 
     private void setupLineRender() {
@@ -158,14 +158,14 @@ public class LineBatch {
         }
     }
 
-
-    private void setupMatrixes(int w, int h) {
-
+    
+    private void setupMatrixes() {
         // Sets the projection matrix to Ortho mode
+    	
         projectionMatrix.loadIdentity();
-        //projectionMatrix.makeOrtho(0, w, h, 0, 1, -1);
-        projectionMatrix.makeOrtho(0, 640, 480, 0, 1, -1);
+        projectionMatrix.makeOrtho(0, GameWindow.windowWidth, GameWindow.windowHeight, 0, -1, 1);
         
+
         // Sets the view Matrix
         viewMatrix.loadIdentity();
         OrthoCamera camera = OrthoCamera.getInstance();
@@ -173,12 +173,23 @@ public class LineBatch {
 
         // Sets the model matrix as the identity
         modelMatrix.loadIdentity();
+        
+        modelMatrix.multMatrix(viewMatrix);
+        float scaleX = (float)((float)GameWindow.windowWidth/(float)GameWindow.virtualWidth);
+      	float scaleY = (float)((float)GameWindow.windowHeight/(float)GameWindow.virtualHeight);
 
-        projectionMatrix.multMatrix(viewMatrix);
+      	modelMatrix.scale(scaleX, scaleY, 1.0f);
+
         projectionMatrix.multMatrix(modelMatrix);
+       // projectionMatrix.multMatrix(modelMatrix);
+        
+        //projectionMatrix.scale(scaleX, scaleY, 1.0f);
+        
         MVP = projectionMatrix;
 
     }
+
+  
 
 
     public void draw(float x1, float y1, float x2, float y2, GLColor color) {

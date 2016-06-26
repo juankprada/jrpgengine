@@ -5,11 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jogamp.opengl.GL;
 import com.jprada.core.entity.utils.CollideBox;
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.Animation;
-import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.util.Vector2;
 
@@ -147,7 +145,7 @@ public abstract class Actor implements Collidable, Interactable {
 
 	public abstract void onRender(SpriteBatch batch, double interpolation);
 
-	public abstract void onRenderDebug(GL gl, RenderBatch batch, double interpolation);
+
 
 	public abstract void onUpdate();
 

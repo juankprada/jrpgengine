@@ -1,11 +1,8 @@
 package com.jprada.core.entity;
 
-import com.jogamp.opengl.GL;
 import com.jprada.core.entity.utils.InteractBox;
-import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.SpriteBatch;
 import com.jprada.core.states.WorldMapState;
-import com.jprada.core.util.GLColor;
 
 /**
  * Created By: Juankprada Date: 10/5/12 Time: 4:44 PM
@@ -68,67 +65,67 @@ public class GameCharacter extends Entity {
 
 	}
 	
-	@Override
-	public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
-		
-		GLColor color = new GLColor(1.0f, 0.0f, 0.0f);
-		
-		// Collide Box
-		{
-			float x1 = this.getCollideBox().getX()
-					+ this.getCollideBox().getxOffset();
-			float y1 = this.getCollideBox().getY()
-					+ this.getCollideBox().getyOffset();
-			float x2 = x1 + this.getCollideBox().getW()
-					- this.getCollideBox().getwOffset()
-					- this.getCollideBox().getxOffset();
-			float y2 = y1 + this.getCollideBox().getH()
-					- this.getCollideBox().gethOffset()
-					- this.getCollideBox().getyOffset();
-	
-			if (!this.collided) {
-				x1 += (this.speed.x * interpolation);
-				x2 += (this.speed.x * interpolation);
-				y1 += (this.speed.y * interpolation);
-				y2 += (this.speed.y * interpolation);
-			}
-			
-			batch.draw(x1, y1, x1, y2, color);
-			batch.draw(x1, y1, x2, y1, color);
-			batch.draw(x2, y2, x1, y2, color);
-			batch.draw(x2, y2, x2, y1, color);
-		}
-		
-		
-		//Interact Box
-		color = new GLColor(0, 1.0f, 0);
-		{
-			float x1 = this.getInteractBox().getX()
-					+ this.getInteractBox().getxOffset();
-			float y1 = this.getInteractBox().getY()
-					+ this.getInteractBox().getyOffset();
-			float x2 = x1 + this.getInteractBox().getW()
-					- this.getInteractBox().getwOffset()
-					- this.getInteractBox().getxOffset();
-			float y2 = y1 + this.getInteractBox().getH()
-					- this.getInteractBox().gethOffset()
-					- this.getInteractBox().getyOffset();
-	
-			if (!this.collided) {
-				x1 += (this.speed.x * interpolation);
-				x2 += (this.speed.x * interpolation);
-				y1 += (this.speed.y * interpolation);
-				y2 += (this.speed.y * interpolation);
-			}
-			
-			batch.draw(x1, y1, x1, y2, color);
-			batch.draw(x1, y1, x2, y1, color);
-			batch.draw(x2, y2, x1, y2, color);
-			batch.draw(x2, y2, x2, y1, color);
-		}
-		
-	}
-	
+//	@Override
+//	public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
+//		
+//		GLColor color = new GLColor(1.0f, 0.0f, 0.0f);
+//		
+//		// Collide Box
+//		{
+//			float x1 = this.getCollideBox().getX()
+//					+ this.getCollideBox().getxOffset();
+//			float y1 = this.getCollideBox().getY()
+//					+ this.getCollideBox().getyOffset();
+//			float x2 = x1 + this.getCollideBox().getW()
+//					- this.getCollideBox().getwOffset()
+//					- this.getCollideBox().getxOffset();
+//			float y2 = y1 + this.getCollideBox().getH()
+//					- this.getCollideBox().gethOffset()
+//					- this.getCollideBox().getyOffset();
+//	
+//			if (!this.collided) {
+//				x1 += (this.speed.x * interpolation);
+//				x2 += (this.speed.x * interpolation);
+//				y1 += (this.speed.y * interpolation);
+//				y2 += (this.speed.y * interpolation);
+//			}
+//			
+//			batch.draw(x1, y1, x1, y2, color);
+//			batch.draw(x1, y1, x2, y1, color);
+//			batch.draw(x2, y2, x1, y2, color);
+//			batch.draw(x2, y2, x2, y1, color);
+//		}
+//		
+//		
+//		//Interact Box
+//		color = new GLColor(0, 1.0f, 0);
+//		{
+//			float x1 = this.getInteractBox().getX()
+//					+ this.getInteractBox().getxOffset();
+//			float y1 = this.getInteractBox().getY()
+//					+ this.getInteractBox().getyOffset();
+//			float x2 = x1 + this.getInteractBox().getW()
+//					- this.getInteractBox().getwOffset()
+//					- this.getInteractBox().getxOffset();
+//			float y2 = y1 + this.getInteractBox().getH()
+//					- this.getInteractBox().gethOffset()
+//					- this.getInteractBox().getyOffset();
+//	
+//			if (!this.collided) {
+//				x1 += (this.speed.x * interpolation);
+//				x2 += (this.speed.x * interpolation);
+//				y1 += (this.speed.y * interpolation);
+//				y2 += (this.speed.y * interpolation);
+//			}
+//			
+//			batch.draw(x1, y1, x1, y2, color);
+//			batch.draw(x1, y1, x2, y1, color);
+//			batch.draw(x2, y2, x1, y2, color);
+//			batch.draw(x2, y2, x2, y1, color);
+//		}
+//		
+//	}
+//	
 	
 
 	@Override

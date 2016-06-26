@@ -3,14 +3,12 @@ package com.jprada.core.entity.map;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jogamp.opengl.GL;
 import com.jprada.core.entity.Actor.Direction;
 import com.jprada.core.entity.Collidable;
 import com.jprada.core.entity.Interactable;
 import com.jprada.core.entity.utils.CollideBox;
 import com.jprada.core.entity.utils.InteractBox;
 import com.jprada.core.graphics.Animation;
-import com.jprada.core.graphics.RenderBatch;
 import com.jprada.core.graphics.SpriteBatch;
 
 /**
@@ -68,9 +66,7 @@ public class Tile implements Collidable, Interactable{
     }
 
 
-    public void onRenderDebug(GL gl, RenderBatch batch, double interpolation) {
-
-    }
+  
 
 
     public void onUpdate() {
