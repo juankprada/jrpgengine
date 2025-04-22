@@ -49,7 +49,7 @@ public class GameWindow implements GLEventListener {
 
     private static boolean fullscreen=false;
     
-    public static boolean ENABLE_DEBUG_INFO = false;
+    public static boolean ENABLE_DEBUG_INFO = true;
 
     // Clear Color definition
     private static float clearColor_r;
@@ -263,13 +263,14 @@ public class GameWindow implements GLEventListener {
             }
         });
 
+
         Animator ani = new Animator(canvas);
         ani.setRunAsFastAsPossible(true);
         animator = ani;
-//        FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
-       
-//        animator = fpsanimator;
-//        animator.add(canvas);
+        //FPSAnimator fpsanimator = new FPSAnimator(TARGET_FPS);
+
+        //animator = fpsanimator;
+        //animator.add(canvas);
         animator.start();
 
     }
@@ -326,6 +327,8 @@ public class GameWindow implements GLEventListener {
             fpsTimer = getMilliSeconds() + 1000;
 
         }
+
+
         
 //        System.out.println("Render");
         renderer.beginRendering(windowWidth, windowHeight);
@@ -350,7 +353,7 @@ public class GameWindow implements GLEventListener {
 //        gl.glDisable(GL.GL_DEPTH_TEST);
 //
 //        // Disable VSync
-//        gl.setSwapInterval(0);
+      gl.setSwapInterval(0);
 //
 //        gl.glClearColor(clearColor_r, clearColor_g, clearColor_b, clearColor_a);
 

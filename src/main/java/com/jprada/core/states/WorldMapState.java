@@ -13,18 +13,13 @@ import com.jprada.core.graphics.RenderBatch.RenderMode;
 import com.jprada.core.particleengine.ParticleEmitter;
 import com.jprada.core.states.input.Keyboard;
 import com.jprada.core.states.input.WorldMapKeyListener;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.builder.ControlBuilder;
-import de.lessvoid.nifty.builder.EffectBuilder;
-import de.lessvoid.nifty.builder.LayerBuilder;
-import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.ScreenBuilder;
-import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.builder.*;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.Color;
+
 
 public class WorldMapState extends GameState {
 
@@ -45,7 +40,7 @@ public class WorldMapState extends GameState {
 	public static TileMap currentMap;
 
 	
-	private Screen  scr;
+	private Screen scr;
 
 	@Override
 	public Keyboard getKeyListener() {

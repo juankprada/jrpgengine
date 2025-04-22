@@ -10,8 +10,8 @@
 
 	<repositories>
 		<repository>
-			<id>nifty-maven-repo.sourceforge.net</id>
-			<url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
 
@@ -35,15 +35,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>lessvoid</groupId>
+			<groupId>com.github.nifty-gui</groupId>
 			<artifactId>nifty</artifactId>
-			<version>1.4.2-SNAPSHOT</version>
+			<version>1.4.3</version>
 		</dependency>
 
 		<dependency>
-			<groupId>lessvoid</groupId>
+			<groupId>com.github.nifty-gui</groupId>
 			<artifactId>nifty-jogl-renderer</artifactId>
-			<version>1.4.2-SNAPSHOT</version>
+			<version>1.4.3</version>
 		</dependency>
 
 		<dependency>
